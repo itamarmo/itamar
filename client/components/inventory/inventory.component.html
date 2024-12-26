@@ -1,0 +1,91 @@
+<div class="container">
+  <!-- Inventory Form -->
+  <form (ngSubmit)="addItem()">
+    <div class="form-group">
+      <label for="productName">שם מוצר</label>
+      <input type="text" id="productName" [(ngModel)]="newItem.ProductName" name="productName" required>
+    </div>
+    <div class="form-group">
+      <label for="productCode">מק"ט</label>
+      <input type="text" id="productCode" [(ngModel)]="newItem.ProductId" name="productCode" required>
+    </div>
+    <div class="form-group">
+      <label for="quantity">כמות</label>
+      <input type="number" id="quantity" [(ngModel)]="newItem.Quantity" name="quantity" min="0" required>
+    </div>
+    <div class="form-group">
+      <label for="location">מיקום</label>
+      <select id="location" [(ngModel)]="newItem.Location" name="location" required>
+        <option value="Megiddo">מגידו</option>
+        <option value="Kedma">קדמה</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="lastDate">תאריך אחרון</label>
+      <input type="date" id="lastDate" [(ngModel)]="newItem.LastUpdatedDate" name="lastDate" required>
+    </div>
+    <div class="form-group">
+      <label for="expiryDate">תאריך תוקף</label>
+      <input type="date" id="expiryDate" [(ngModel)]="newItem.ExpiryDate" name="expiryDate">
+    </div>
+    <div class="form-group">
+      <label for="notes">הערות</label>
+      <textarea id="notes" [(ngModel)]="newItem.Notes" name="notes"></textarea>
+    </div>
+    <div class="actions">
+      <button type="submit">הוסף פריט</button>
+    </div>
+  </form>
+
+  <!-- Search -->
+  <div class="search-container">
+    <input type="text" placeholder="חיפוש במלאי..." [(ngModel)]="searchTerm" (input)="searchItems()">
+  </div>
+
+  <!-- Sort -->
+  <div class="sort-container">
+    <select [(ngModel)]="sortField">
+      <option value="productCode">מיין לפי מק"ט</option>
+      <option value="productName">מיין לפי שם מוצר</option>
+      <option value="quantity">מיין לפי כמות</option>
+      <option value="location">מיין לפי מיקום</option>
+      <option value="lastDate">מיין לפי תאריך אחרון</option>
+      <option value="expiryDate">מיין לפי תאריך תוקף</option>
+    </select>
+  </div>
+
+  <!-- Inventory Table -->
+  <table style="direction: rtl">
+    <thead>
+    <tr>
+      <th>מק"ט</th>
+      <th>שם מוצר</th>
+      <th>כמות</th>
+      <th>מיקום</th>
+      <th>תאריך אחרון</th>
+      <th>תאריך תוקף</th>
+      <th>סטטוס תוקף</th>
+      <th>הערות</th>
+      <th>פעולות</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let item of filteredInventory; let i = index">
+      <td>{{ item.ProductID }}</td>
+      <td>{{ item.ProductName }}</td>
+      <td>{{ item.Quantity }}</td>
+      <td>{{ item.ItemLocation }}</td>
+      <td>{{ item.LastDate }}</td>
+      <td>{{ item.ExpiryDate || 'לא צוין' }}</td>
+      <td [class.expired]="isExpired(item.ExpiryDate)" [class.valid]="!isExpired(item.ExpiryDate)">
+        {{ item.ExpiryDate ? (isExpired(item.ExpiryDate) ? 'פג תוקף' : 'בתוקף') : 'לא צוין' }}
+      </td>
+      <td>{{ item.Notes }}</td>
+      <td>
+        <button (click)="editItem(i)">✏️</button>
+        <button (click)="deleteItem(i)">🗑️</button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
