@@ -3,7 +3,6 @@ body {
   margin: 0;
   background-color: #f0f0f0;
 }
-
 .header {
   width: 100%;
   background-color: #007bff;
@@ -11,38 +10,30 @@ body {
   text-align: center;
   color: #fff;
 }
-
 .header .title {
   font-size: 24px;
 }
-
 .container {
   padding: 20px;
 }
-
 .form-group {
   margin-bottom: 15px;
 }
-
 .form-group label {
   display: block;
   margin-bottom: 5px;
 }
-
 .form-group input, .form-group select, .form-group textarea {
   width: 100%;
   padding: 8px;
   box-sizing: border-box;
 }
-
 .form-group textarea {
   height: 100px;
 }
-
 .actions {
   margin-bottom: 20px;
 }
-
 .actions button {
   padding: 10px 20px;
   background-color: #007bff;
@@ -50,74 +41,26 @@ body {
   border: none;
   cursor: pointer;
 }
-
 .actions button:hover {
   background-color: #0056b3;
 }
-
 table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 20px;
-  text-align: right;
 }
-
 table, th, td {
   border: 1px solid #ddd;
-  direction: rtl !important;
-  text-align: right;
 }
-
-tr {
-  direction: rtl !important;
-  text-align: right;
-}
-
 th, td {
   padding: 8px;
   text-align: right;
 }
-
 th {
   background-color: #007bff;
   color: white;
-  cursor: pointer;
 }
-
 .icon {
   cursor: pointer;
   color: #007bff;
-  margin: 0 5px;
-}
-
-.expired {
-  color: red;
-  font-weight: bold;
-}
-
-.valid {
-  color: green;
-  font-weight: bold;
-}
-
-.search-container {
-  margin-bottom: 20px;
-}
-
-.search-container input {
-  width: 100%;
-  padding: 10px;
-  font-size: 16px;
-  border: 1px solid #ddd;
-}
-
-.sort-container {
-  margin-bottom: 20px;
-}
-
-.sort-container select {
-  width: 100%;
-  padding: 10px;
-  font-size: 16px;
-  border: 1px solid #ddd;
 }

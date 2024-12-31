@@ -7,7 +7,7 @@
     </div>
     <div class="form-group">
       <label for="productCode">מק"ט</label>
-      <input type="text" id="productCode" [(ngModel)]="newItem.ProductId" name="productCode" required>
+      <input type="text" id="productCode" [(ngModel)]="newItem.SKU" name="productCode" required>
     </div>
     <div class="form-group">
       <label for="quantity">כמות</label>
@@ -71,12 +71,12 @@
     </thead>
     <tbody>
     <tr *ngFor="let item of filteredInventory; let i = index">
-      <td>{{ item.ProductID }}</td>
+      <td>{{ item.SKU }}</td>
       <td>{{ item.ProductName }}</td>
       <td>{{ item.Quantity }}</td>
       <td>{{ item.ItemLocation }}</td>
-      <td>{{ item.LastDate }}</td>
-      <td>{{ item.ExpiryDate || 'לא צוין' }}</td>
+      <td>{{ item.LastUpdatedDate | date:'dd/MM/yyyy' }}</td>
+      <td>{{ (item.ExpiryDate | date:'dd/MM/yyyy') || 'לא צוין' }}</td>
       <td [class.expired]="isExpired(item.ExpiryDate)" [class.valid]="!isExpired(item.ExpiryDate)">
         {{ item.ExpiryDate ? (isExpired(item.ExpiryDate) ? 'פג תוקף' : 'בתוקף') : 'לא צוין' }}
       </td>

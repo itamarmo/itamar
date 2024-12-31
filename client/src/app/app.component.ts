@@ -5,7 +5,7 @@ import {InventoryComponent} from '../../components/inventory/inventory.component
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, LoginComponent, InventoryComponent],
+  imports: [RouterOutlet],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

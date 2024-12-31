@@ -32,7 +32,7 @@ def look_for_user(username, password):
 
 
 def get_inventory():
-    query = (f'SELECT ProductID, ProductName, Quantity, ItemLocation, LastUpdatedDate, ExpiryDate, Notes '
+    query = (f'SELECT SKU, ProductName, Quantity, ItemLocation, LastUpdatedDate, ExpiryDate, Notes '
              f'FROM product')
     cursor.execute(query)
 
@@ -58,10 +58,20 @@ def get_location_id(location_name):
         # Handle case where LocationName is not found
         raise ValueError("Location not found")
 
-def add_inventory(product_name, product_id, quantity, location, last_updated_date, expiry_date, notes):
+
+def get_last_product_id():
+    query = "SELECT MAX(ProductID) AS HighestProductID FROM product"
+    cursor.execute(query)
+
+    result = cursor.fetchone()
+    highest_product_id = result['HighestProductID'] if result else None
+
+    return highest_product_id
+
+def add_inventory(product_name, sku, quantity, location, last_updated_date, expiry_date, notes):
     query = """
-                    INSERT INTO product (ProductName, ProductID, SKU, Quantity, ItemLocation, LastUpdatedDate, ExpiryDate, Notes, FK_LocationID)
-                    VALUES (%s, %s, '', %s, %s, %s, %s, %s, %s)
+                    INSERT INTO product (ProductId, ProductName, SKU, Quantity, ItemLocation, LastUpdatedDate, ExpiryDate, Notes, FK_LocationID)
+                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
                 """
 
     # Convert dates if necessary (assuming they are datetime objects or strings in 'YYYY-MM-DD' format)
@@ -73,10 +83,79 @@ def add_inventory(product_name, product_id, quantity, location, last_updated_dat
 
     location_id = get_location_id(location)
 
-    data = (product_name, product_id, quantity, location, last_updated_date, expiry_date, notes, location_id)
+    data = (get_last_product_id() + 1, product_name, sku, quantity, location, last_updated_date, expiry_date, notes, location_id)
 
     # Execute the query
     cursor.execute(query, data)
 
     # Commit the transaction
     connection.commit()
+
+def get_last_order_id():
+    query = "SELECT MAX(OrderID) AS HighestOrderID FROM `order`"
+    cursor.execute(query)
+
+    result = cursor.fetchone()
+    highest_order_id = result['HighestOrderID'] if result else None
+
+    return highest_order_id
+
+def get_supplier_id(supplier_name):
+    query = "SELECT SupplierID FROM suppliers WHERE SupplierName = %s"
+    cursor.execute(query, (supplier_name,))
+    result = cursor.fetchone()
+    if result:
+        return result['SupplierID']
+    else:
+        # Handle case where LocationName is not found
+        raise ValueError("Supplier not found")
+
+def get_product_id(product_name):
+    query = "SELECT ProductID FROM product WHERE ProductName = %s"
+    cursor.execute(query, (product_name,))
+    result = cursor.fetchone()
+    if result:
+        return result['ProductID']
+    else:
+        # Handle case where LocationName is not found
+        raise ValueError("Product not found")
+
+def add_order(sku, product_name, quantity, supplier_name, location_name):
+    order_id = get_last_order_id() + 1
+    location_id = get_location_id(location_name)
+    supplier_id = get_supplier_id(supplier_name)
+    product_id = get_product_id(product_name)
+
+    query = """
+                    INSERT INTO `order` (OrderID, ItemName, SKU, ProductID, Quantity, RequiredDate, SupplierID, LocationID, UserID)
+                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+                """
+
+    required_date = datetime.now().strftime('%Y-%m-%d')
+
+    data = (order_id, product_name, sku, product_id, quantity, required_date, supplier_id, location_id, 1)
+
+    cursor.execute(query, data)
+
+    connection.commit()
+
+
+def get_orders():
+    query = (f'SELECT p.SKU, p.ProductName, o.Quantity, s.SupplierName, p.Notes, l.LocationName '
+             f'FROM projectdb.order as o '
+             f'INNER JOIN suppliers as s ON o.SupplierID = s.SupplierID '
+             f'INNER JOIN product as p ON o.ProductID = p.ProductID '
+             f'INNER JOIN locations as l ON o.LocationID = l.LocationID')
+
+    cursor.execute(query)
+
+    results = cursor.fetchall()
+
+    orders = [
+        {
+            key: (value if not isinstance(value, datetime) else value.strftime('%Y-%m-%d'))
+            for key, value in row.items()
+        }
+        for row in results
+    ]
+    return orders

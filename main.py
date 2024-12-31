@@ -23,12 +23,20 @@ app.add_middleware(
 
 class Product(BaseModel):
     ProductName: str
-    ProductId: int
+    SKU: str
     Quantity: int
     Location: str
     LastUpdatedDate: date
     ExpiryDate: Optional[date] = None
     Notes: Optional[str] = None
+
+
+class Order(BaseModel):
+    ProductName: str
+    SKU: str
+    Quantity: int
+    LocationName: str
+    SupplierName: str
 
 
 @app.get("/login/{user}/{password}/")
@@ -45,7 +53,7 @@ async def get_inventory():
 async def add_inventory(product: Product):
     # Get all parameters from the request body
     product_name = product.ProductName
-    product_id = product.ProductId
+    product_id = product.SKU
     quantity = product.Quantity
     location = product.Location
     last_updated_date = product.LastUpdatedDate
@@ -53,3 +61,20 @@ async def add_inventory(product: Product):
     notes = product.Notes
 
     persistence.add_inventory(product_name, product_id, quantity, location, last_updated_date, expiry_date, notes)
+
+
+@app.get("/GetOrders/")
+async def get_orders():
+    return persistence.get_orders()
+
+
+@app.post("/AddOrder")
+async def add_order(order: Order):
+    # Get all parameters from the request body
+    product_name = order.ProductName
+    product_id = order.SKU
+    quantity = order.Quantity
+    location = order.LocationName
+    supplier = order.SupplierName
+
+    persistence.add_order(product_id, product_name, quantity, supplier, location)

@@ -1,4 +1,4 @@
-import {ApplicationConfig, provideZoneChangeDetection} from '@angular/core';
+import {ApplicationConfig, LOCALE_ID, provideZoneChangeDetection} from '@angular/core';
 import {provideRouter} from '@angular/router';
 
 import {routes} from './app.routes';
@@ -8,13 +8,20 @@ import {bootstrapApplication} from '@angular/platform-browser';
 import {HomeComponent} from '../../components/home/home.component';
 import {InventoryComponent} from '../../components/inventory/inventory.component';
 import {AppComponent} from './app.component';
+import {registerLocaleData} from '@angular/common';
+import localeGb from '@angular/common/locales/en-GB';
+import localeHe from '@angular/common/locales/he';
+
+registerLocaleData(localeGb);
+registerLocaleData(localeHe);
 
 export const appConfig: ApplicationConfig = {
   providers: [provideZoneChangeDetection({eventCoalescing: true}),
     provideRouter(routes), provideHttpClient(),
-    provideRouter([{ path: 'Login', component: LoginComponent }]),
-    provideRouter([{ path: 'Home', component: HomeComponent }]),
-    provideRouter([{ path: 'inventory', component: InventoryComponent }])]
+    provideRouter([{path: 'Login', component: LoginComponent}]),
+    provideRouter([{path: 'Home', component: HomeComponent}]),
+    provideRouter([{path: 'inventory', component: InventoryComponent}]),
+    {provide: LOCALE_ID, useValue: 'en-GB'}]
 };
 
 bootstrapApplication(AppComponent, {

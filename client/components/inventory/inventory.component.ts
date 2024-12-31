@@ -14,7 +14,7 @@ export class InventoryComponent implements OnInit {
   inventory: any[] = [];
   newItem = {
     ProductName: '',
-    ProductId: '',
+    SKU: '',
     Quantity: 0,
     Location: '',
     LastUpdatedDate: '',
@@ -46,7 +46,7 @@ export class InventoryComponent implements OnInit {
   }
 
   addItem(): void {
-    if (!this.newItem.ProductName || !this.newItem.ProductId || !this.newItem.Quantity || !this.newItem.Location
+    if (!this.newItem.ProductName || !this.newItem.SKU || !this.newItem.Quantity || !this.newItem.Location
       || !this.newItem.LastUpdatedDate) {
       alert('יש למלא את כל השדות פרט לשדה תאריך תוקף והערות.');
       return;
@@ -67,7 +67,7 @@ export class InventoryComponent implements OnInit {
   clearForm(): void {
     this.newItem = {
       ProductName: '',
-      ProductId: '',
+      SKU: '',
       Quantity: 0,
       Location: '',
       LastUpdatedDate: '',

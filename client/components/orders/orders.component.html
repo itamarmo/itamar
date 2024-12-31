@@ -1,0 +1,71 @@
+<div class="header">
+  <div class="title">יצירת בקשה להזמנת רכש</div>
+</div>
+<div class="container">
+  <div class="actions">
+    <button (click)="createOrderRequest()">צור בקשת הזמנה</button>
+  </div>
+  <div class="form-group">
+    <label for="productName">שם מוצר</label>
+    <input [(ngModel)]="productName" id="productName" list="productNames" required>
+    <datalist id="productNames">
+      <!-- שמות מוצרים יתווספו כאן מבסיס הנתונים -->
+    </datalist>
+  </div>
+  <div class="form-group">
+    <label for="productCode">מק"ט</label>
+    <input [(ngModel)]="SKU" id="productCode" list="productCodes" required>
+    <datalist id="productCodes">
+      <!-- מק"טים יתווספו כאן מבסיס הנתונים -->
+    </datalist>
+  </div>
+  <div class="form-group">
+    <label for="quantity">כמות</label>
+    <input [(ngModel)]="quantity" id="quantity" type="number" min="1" required>
+  </div>
+  <div class="form-group">
+    <label for="supplier">ספק מועדף</label>
+    <input [(ngModel)]="supplier" id="supplier" list="suppliers" required>
+    <datalist id="suppliers">
+      <!-- שמות ספקים יתווספו כאן מבסיס הנתונים -->
+    </datalist>
+  </div>
+  <div class="form-group">
+    <label for="location">מיקום</label>
+
+    <select id="location" [(ngModel)]="location" name="location" required>
+      <option value="Megiddo">מגידו</option>
+      <option value="Kedma">קדמה</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="notes">הערות</label>
+    <textarea [(ngModel)]="notes" id="notes"></textarea>
+  </div>
+  <div class="actions">
+    <button (click)="copyToEmail()">העתק למייל</button>
+    <button (click)="openEmailClient()">פתח מייל</button>
+  </div>
+  <table>
+    <thead>
+    <tr>
+      <th>שם מוצר</th>
+      <th>מק"ט</th>
+      <th>כמות</th>
+      <th>ספק מועדף</th>
+      <th>מיקום</th>
+      <th>הערות</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let request of previousRequests">
+      <td>{{ request.ProductName }}</td>
+      <td>{{ request.SKU }}</td>
+      <td>{{ request.Quantity }}</td>
+      <td>{{ request.SupplierName }}</td>
+      <td>{{ request.LocationName }}</td>
+      <td>{{ request.Notes }}</td>
+    </tr>
+    </tbody>
+  </table>
+</div>
