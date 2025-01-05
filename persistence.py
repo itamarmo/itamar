@@ -100,6 +100,15 @@ def get_last_order_id():
 
     return highest_order_id
 
+def get_last_transport_id():
+    query = "SELECT MAX(TransportID) AS HighestTransportID FROM `transport`"
+    cursor.execute(query)
+
+    result = cursor.fetchone()
+    highest_transport_id = result['HighestTransportID'] if result else None
+
+    return highest_transport_id
+
 def get_supplier_id(supplier_name):
     query = "SELECT SupplierID FROM suppliers WHERE SupplierName = %s"
     cursor.execute(query, (supplier_name,))
@@ -159,3 +168,35 @@ def get_orders():
         for row in results
     ]
     return orders
+
+
+def get_transports():
+    query = (f'SELECT t.TransportName, t.Type, t.Status, l.LocationName '
+             f'FROM transport as t INNER JOIN locations as l  ON l.LocationID = t.fk_transport_LocationId')
+    cursor.execute(query)
+
+    results = cursor.fetchall()
+
+    transports = [
+        {
+            key: (value if not isinstance(value, datetime) else value.strftime('%Y-%m-%d'))
+            for key, value in row.items()
+        }
+        for row in results
+    ]
+    return transports
+
+def add_transport(transport_name, transport_type, location_name, status):
+    transport_id = get_last_transport_id() + 1
+    location_id = get_location_id(location_name)
+
+    query = """
+                    INSERT INTO `transport` (TransportID, TransportName, Type, Status, fk_transport_LocationId)
+                    VALUES (%s, %s, %s, %s, %s)
+                """
+
+    data = (transport_id, transport_name, transport_type, status, location_id)
+
+    cursor.execute(query, data)
+
+    connection.commit()

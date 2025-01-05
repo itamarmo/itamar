@@ -1,0 +1,50 @@
+<div class="header">
+  <div class="title">בקרת כלי תחבורה</div>
+  <img src="assets/logo.png" alt="System Logo">
+</div>
+<div class="container">
+  <div class="sidebar">
+    <h3>רשימת כלי תחבורה</h3>
+    <h4>מטוסים</h4>
+    <ul class="vehicle-list">
+      <li *ngFor="let vehicle of planes" [class]="'status ' + vehicle.Status">
+        <span></span> מטוס - {{ vehicle.TransportName }} (מיקום: {{ vehicle.LocationName }})
+      </li>
+    </ul>
+    <h4>כלי רכב</h4>
+    <ul class="vehicle-list">
+      <li *ngFor="let vehicle of vehicles" [class]="'status ' + vehicle.Status">
+        <span></span> רכב {{ vehicle.TransportName }} (מיקום: {{ vehicle.LocationName }})
+      </li>
+    </ul>
+    <div class="add-vehicle">
+      <h3>הוסף כלי תחבורה</h3>
+      <select [(ngModel)]="newVehicle.Type">
+        <option value="Plane">מטוס</option>
+        <option value="Vehicle">רכב</option>
+      </select>
+      <input type="text" [(ngModel)]="newVehicle.TransportName" placeholder="שם הכלי">
+      <select [(ngModel)]="newVehicle.LocationName">
+        <option value="Megiddo">מגידו</option>
+        <option value="Kedma">קדמה</option>
+      </select>
+      <select [(ngModel)]="newVehicle.Status">
+        <option value="Proper">תקין וזמין</option>
+        <option value="Tackle">תקול</option>
+        <option value="Maintenance">בטיפול</option>
+        <option value="In use">בשימוש</option>
+      </select>
+      <button (click)="addVehicle()">הוסף</button>
+    </div>
+  </div>
+  <div class="main">
+    <h3>Dashboard</h3>
+    <div class="chart-container">
+      <canvas id="planeChart"></canvas>
+    </div>
+    <div class="chart-container">
+      <canvas id="carChart"></canvas>
+    </div>
+  </div>
+0
+</div>

@@ -39,6 +39,13 @@ class Order(BaseModel):
     SupplierName: str
 
 
+class Transport(BaseModel):
+    TransportName: str
+    Type: str
+    Status: str
+    LocationName: str
+
+
 @app.get("/login/{user}/{password}/")
 async def login(user: str, password: str):
     return look_for_user(user, password)
@@ -78,3 +85,13 @@ async def add_order(order: Order):
     supplier = order.SupplierName
 
     persistence.add_order(product_id, product_name, quantity, supplier, location)
+
+
+@app.get("/GetTransports/")
+async def get_transports():
+    return persistence.get_transports()
+
+
+@app.post("/AddTransport")
+async def add_transport(transport: Transport):
+    persistence.add_transport(transport.TransportName, transport.Type, transport.LocationName, transport.Status)
