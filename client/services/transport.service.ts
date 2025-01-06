@@ -17,4 +17,10 @@ export class TransportService {
   addVehicle(vehicle: any): Observable<any> {
     return this.http.post<any>(`${this.baseUrl}/AddTransport`, vehicle);
   }
+
+  deleteVehicle(vehicle: any): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/DeleteTransport`, {
+      TransportID: vehicle.TransportID
+    });
+  }
 }

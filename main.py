@@ -46,6 +46,10 @@ class Transport(BaseModel):
     LocationName: str
 
 
+class DeleteTransport(BaseModel):
+    TransportID: int
+
+
 @app.get("/login/{user}/{password}/")
 async def login(user: str, password: str):
     return look_for_user(user, password)
@@ -95,3 +99,8 @@ async def get_transports():
 @app.post("/AddTransport")
 async def add_transport(transport: Transport):
     persistence.add_transport(transport.TransportName, transport.Type, transport.LocationName, transport.Status)
+
+
+@app.post("/DeleteTransport")
+async def delete_transport(transport: DeleteTransport):
+    persistence.delete_transport(transport.TransportID)

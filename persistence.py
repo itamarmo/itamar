@@ -68,6 +68,7 @@ def get_last_product_id():
 
     return highest_product_id
 
+
 def add_inventory(product_name, sku, quantity, location, last_updated_date, expiry_date, notes):
     query = """
                     INSERT INTO product (ProductId, ProductName, SKU, Quantity, ItemLocation, LastUpdatedDate, ExpiryDate, Notes, FK_LocationID)
@@ -83,13 +84,15 @@ def add_inventory(product_name, sku, quantity, location, last_updated_date, expi
 
     location_id = get_location_id(location)
 
-    data = (get_last_product_id() + 1, product_name, sku, quantity, location, last_updated_date, expiry_date, notes, location_id)
+    data = (get_last_product_id() + 1, product_name, sku, quantity, location, last_updated_date, expiry_date, notes,
+            location_id)
 
     # Execute the query
     cursor.execute(query, data)
 
     # Commit the transaction
     connection.commit()
+
 
 def get_last_order_id():
     query = "SELECT MAX(OrderID) AS HighestOrderID FROM `order`"
@@ -100,6 +103,7 @@ def get_last_order_id():
 
     return highest_order_id
 
+
 def get_last_transport_id():
     query = "SELECT MAX(TransportID) AS HighestTransportID FROM `transport`"
     cursor.execute(query)
@@ -108,6 +112,7 @@ def get_last_transport_id():
     highest_transport_id = result['HighestTransportID'] if result else None
 
     return highest_transport_id
+
 
 def get_supplier_id(supplier_name):
     query = "SELECT SupplierID FROM suppliers WHERE SupplierName = %s"
@@ -119,6 +124,7 @@ def get_supplier_id(supplier_name):
         # Handle case where LocationName is not found
         raise ValueError("Supplier not found")
 
+
 def get_product_id(product_name):
     query = "SELECT ProductID FROM product WHERE ProductName = %s"
     cursor.execute(query, (product_name,))
@@ -128,6 +134,7 @@ def get_product_id(product_name):
     else:
         # Handle case where LocationName is not found
         raise ValueError("Product not found")
+
 
 def add_order(sku, product_name, quantity, supplier_name, location_name):
     order_id = get_last_order_id() + 1
@@ -171,7 +178,7 @@ def get_orders():
 
 
 def get_transports():
-    query = (f'SELECT t.TransportName, t.Type, t.Status, l.LocationName '
+    query = (f'SELECT t.TransportID, t.TransportName, t.Type, t.Status, l.LocationName, t.CreateTime '
              f'FROM transport as t INNER JOIN locations as l  ON l.LocationID = t.fk_transport_LocationId')
     cursor.execute(query)
 
@@ -186,16 +193,29 @@ def get_transports():
     ]
     return transports
 
+
 def add_transport(transport_name, transport_type, location_name, status):
     transport_id = get_last_transport_id() + 1
     location_id = get_location_id(location_name)
 
     query = """
-                    INSERT INTO `transport` (TransportID, TransportName, Type, Status, fk_transport_LocationId)
-                    VALUES (%s, %s, %s, %s, %s)
+                    INSERT INTO `transport` (TransportID, TransportName, Type, Status, fk_transport_LocationId, CreateTime)
+                    VALUES (%s, %s, %s, %s, %s, %s)
                 """
 
-    data = (transport_id, transport_name, transport_type, status, location_id)
+    data = (transport_id, transport_name, transport_type, status, location_id, datetime.now())
+
+    cursor.execute(query, data)
+
+    connection.commit()
+
+
+def delete_transport(transport_id):
+    query = """
+                    DELETE FROM `transport` WHERE TransportID = %s
+                """
+
+    data = [transport_id]
 
     cursor.execute(query, data)
 

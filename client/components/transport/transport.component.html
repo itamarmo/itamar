@@ -8,13 +8,38 @@
     <h4>מטוסים</h4>
     <ul class="vehicle-list">
       <li *ngFor="let vehicle of planes" [class]="'status ' + vehicle.Status">
-        <span></span> מטוס - {{ vehicle.TransportName }} (מיקום: {{ vehicle.LocationName }})
+        <div></div> מטוס - {{ vehicle.TransportName }} (מיקום: {{ vehicle.LocationName }})
+        <div>
+          נוצר בתאריך
+          {{vehicle.CreateTime | date:'dd/MM/yyyy'}}
+        </div>
+        <div class="actions">
+          <button (click)="onEditVehicle(vehicle)" class="edit-btn">
+            <i class="fas fa-pencil-alt"></i> ערוך
+          </button>
+          <button (click)="onDeleteVehicle(vehicle)" class="delete-btn">
+            <i class="fas fa-trash-alt"></i> מחק
+          </button>
+        </div>
       </li>
     </ul>
+
     <h4>כלי רכב</h4>
     <ul class="vehicle-list">
       <li *ngFor="let vehicle of vehicles" [class]="'status ' + vehicle.Status">
-        <span></span> רכב {{ vehicle.TransportName }} (מיקום: {{ vehicle.LocationName }})
+        <div></div> רכב {{ vehicle.TransportName }} (מיקום: {{ vehicle.LocationName }})
+        <div>
+          נוצר בתאריך
+          {{vehicle.CreateTime | date:'dd/MM/yyyy'}}
+        </div>
+        <div class="actions">
+          <button (click)="onEditVehicle(vehicle)" class="edit-btn">
+            <i class="fas fa-pencil-alt"></i> ערוך
+          </button>
+          <button (click)="onDeleteVehicle(vehicle)" class="delete-btn">
+            <i class="fas fa-trash-alt"></i> מחק
+          </button>
+        </div>
       </li>
     </ul>
     <div class="add-vehicle">
@@ -46,5 +71,4 @@
       <canvas id="carChart"></canvas>
     </div>
   </div>
-0
 </div>

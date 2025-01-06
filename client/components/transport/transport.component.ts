@@ -1,13 +1,14 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {TransportService} from '../../services/transport.service';
 import {FormsModule} from '@angular/forms';
-import {NgForOf} from '@angular/common';
-import { Chart } from 'chart.js/auto';
+import {CommonModule, NgForOf} from '@angular/common';
+import {Chart} from 'chart.js/auto';
 
 @Component({
   selector: 'app-transport',
   imports: [
     FormsModule,
+    CommonModule,
     NgForOf
   ],
   templateUrl: './transport.component.html',
@@ -17,9 +18,10 @@ export class TransportComponent {
   vehicles: any[] = [];
   planes: any[] = [];
   cars: any[] = [];
-  newVehicle = { Type: 'Plane', TransportName: '', LocationName: '', Status: 'green' };
+  newVehicle = {Type: 'Plane', TransportName: '', LocationName: '', Status: 'green'};
 
-  constructor(private dataService: TransportService) {}
+  constructor(private dataService: TransportService) {
+  }
 
   ngOnInit(): void {
     this.loadVehicles();
@@ -41,7 +43,7 @@ export class TransportComponent {
     this.dataService.addVehicle(this.newVehicle).subscribe({
       next: () => {
         this.loadVehicles(); // Refresh the list
-        this.newVehicle = { Type: 'plane', TransportName: '', LocationName: '', Status: 'green' }; // Reset the form
+        this.newVehicle = {Type: 'plane', TransportName: '', LocationName: '', Status: 'green'}; // Reset the form
       },
       error: (err) => console.error('Error adding vehicle:', err),
     });
@@ -101,4 +103,19 @@ export class TransportComponent {
 
     return [counts.Proper, counts.Tackle, counts['In use'], counts.Maintenance];
   }
+
+  onEditVehicle(vehicle: any): void {
+    console.log('Edit vehicle:', vehicle);
+    // Add your logic to edit the vehicle, e.g., open a modal or navigate to an edit page.
+  }
+
+  onDeleteVehicle(vehicle: any): void {
+    this.dataService.deleteVehicle(vehicle).subscribe({
+      next: () => {
+        this.loadVehicles(); // Refresh the list
+      },
+      error: (err) => console.error('Error adding vehicle:', err),
+    });
+  }
+
 }
