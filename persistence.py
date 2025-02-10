@@ -176,6 +176,26 @@ def get_orders():
     ]
     return orders
 
+def get_orders_by_date(start_date, end_date):
+    query = (f'SELECT p.SKU, p.ProductName, o.Quantity, s.SupplierName, p.Notes, l.LocationName '
+             f'FROM projectdb.order as o '
+             f'INNER JOIN suppliers as s ON o.SupplierID = s.SupplierID '
+             f'INNER JOIN product as p ON o.ProductID = p.ProductID '
+             f'INNER JOIN locations as l ON o.LocationID = l.LocationID '
+             f'WHERE o.RequiredDate >= %s AND o.RequiredDate <= %s')
+
+    cursor.execute(query, (start_date, end_date))
+
+    results = cursor.fetchall()
+
+    orders = [
+        {
+            key: (value if not isinstance(value, datetime) else value.strftime('%Y-%m-%d'))
+            for key, value in row.items()
+        }
+        for row in results
+    ]
+    return orders
 
 def get_transports():
     query = (f'SELECT t.TransportID, t.TransportName, t.Type, t.Status, l.LocationName, t.CreateTime '
@@ -220,3 +240,20 @@ def delete_transport(transport_id):
     cursor.execute(query, data)
 
     connection.commit()
+
+def get_transports_by_date(start_date, end_date):
+    query = (f'SELECT t.TransportID, t.TransportName, t.Type, t.Status, l.LocationName, t.CreateTime '
+             f'FROM transport as t INNER JOIN locations as l  ON l.LocationID = t.fk_transport_LocationId '
+             f'WHERE o.RequiredDate >= %s AND o.RequiredDate <= %s')
+    cursor.execute(query, (start_date, end_date))
+
+    results = cursor.fetchall()
+
+    transports = [
+        {
+            key: (value if not isinstance(value, datetime) else value.strftime('%Y-%m-%d'))
+            for key, value in row.items()
+        }
+        for row in results
+    ]
+    return transports

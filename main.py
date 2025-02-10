@@ -78,6 +78,9 @@ async def add_inventory(product: Product):
 async def get_orders():
     return persistence.get_orders()
 
+@app.get("/GetOrdersByDate/")
+async def get_orders(startDate, endDate):
+    return persistence.get_orders_by_date(startDate, endDate)
 
 @app.post("/AddOrder")
 async def add_order(order: Order):
@@ -104,3 +107,7 @@ async def add_transport(transport: Transport):
 @app.post("/DeleteTransport")
 async def delete_transport(transport: DeleteTransport):
     persistence.delete_transport(transport.TransportID)
+
+@app.get("/GetTransportByDate/")
+async def get_transport_by_date(startDate, endDate):
+    return persistence.get_transports_by_date(startDate, endDate)

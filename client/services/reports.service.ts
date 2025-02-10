@@ -1,24 +1,35 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import {Inventory, InventoryMovement, OrderRequest, Transport} from '../components/reports/reports.component';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ReportsService {
-  private apiUrl = 'http://localhost:8000';
+  private readonly baseUrl = 'http://localhost:8000'; // Replace with your actual API base URL
 
   constructor(private http: HttpClient) {}
 
-  // Fetch report data
-  getReportData(reportType: string, productFilter: string): Observable<any> {
-    const url = `${this.apiUrl}/report/${reportType}`;  // Example endpoint
-    return this.http.get<any>(url, { params: { productFilter } });
+  getCurrentInventory(): Observable<Inventory[]> {
+    return this.http.get<Inventory[]>(`${this.baseUrl}/GetInventory`);
   }
 
-  // Fetch available products list
-  getProductList(): Observable<any[]> {
-    const url = `${this.apiUrl}/GetInventory/`;  // Example endpoint for fetching products
-    return this.http.get<any[]>(url);
+  getOrderRequests(startDate: string, endDate: string): Observable<OrderRequest[]> {
+    const params = new HttpParams()
+      .set('startDate', startDate)
+      .set('endDate', endDate);
+    return this.http.get<OrderRequest[]>(`${this.baseUrl}/GetOrdersByDate`, { params });
+  }
+
+  getTransportStatus(): Observable<Transport[]> {
+    return this.http.get<Transport[]>(`${this.baseUrl}/GetTransports`);
+  }
+
+  getInventoryMovements(startDate: string, endDate: string): Observable<InventoryMovement[]> {
+    const params = new HttpParams()
+      .set('startDate', startDate)
+      .set('endDate', endDate);
+    return this.http.get<InventoryMovement[]>(`${this.baseUrl}/inventory-movements`, { params });
   }
 }

@@ -1,32 +1,61 @@
-<div class="header">
-  <div class="title">הפקת דוחות מערכת</div>
-</div>
-<div class="container">
-  <div class="form-group">
-    <label for="reportType">בחר סוג דוח</label>
-    <select id="reportType" [(ngModel)]="reportType">
-      <option value="currentInventory">דוח מלאי נוכחי</option>
-      <option value="inventoryMovements">דוח תנועות מלאי</option>
-      <option value="missingProducts">דוח מוצרים חסרים</option>
-      <option value="expiredProducts">דוח מוצרים פגי תוקף</option>
-      <option value="vehicleStatus">דוח סטטוס כלי התחבורה</option>
-      <option value="purchaseRequests">דוח בקשות להזמנת רכש</option>
-    </select>
-  </div>
-  <div class="form-group">
-    <label for="productFilter">בחר מוצר להציג בגרף</label>
-    <input type="text" id="productFilter" [(ngModel)]="productFilter" list="productList">
-    <datalist id="productList">
-      <option *ngFor="let product of productList" [value]="product.ProductName"></option>
-    </datalist>
-  </div>
-  <div class="actions">
-    <button (click)="generateReport()">יצירת דוח</button>
-    <button (click)="exportReportToCSV()">ייצוא לקובץ CSV</button>
-  </div>
-  <div id="reportContainer" class="report" *ngIf="reportVisible">
-    <h3>דוח</h3>
-    <div id="reportContent">{{ reportContent }}</div>
-    <canvas id="reportChart"></canvas>
-  </div>
+<div class="reports-container">
+  <header class="header">
+    <h1 class="title">יצירת דוחות</h1>
+  </header>
+
+  <main class="container">
+    <form [formGroup]="reportForm" (ngSubmit)="generateReport()">
+      <div class="report-option">
+        <label for="reportType">בחר דוח להפקה:</label>
+        <select id="reportType" formControlName="reportType">
+          <option value="inventory">דוח מלאי</option>
+          <option value="movements">דוח תנועות מלאי</option>
+          <option value="orders">דוח הזמנות</option>
+          <option value="transport">דוח תחבורה</option>
+        </select>
+      </div>
+
+      <div class="report-option"
+           *ngIf="reportForm.get('reportType')?.value === 'orders' ||
+                  reportForm.get('reportType')?.value === 'movements'">
+        <label for="startDate">תאריך התחלה:</label>
+        <input type="date" id="startDate" formControlName="startDate">
+
+        <label for="endDate">תאריך סיום:</label>
+        <input type="date" id="endDate" formControlName="endDate">
+      </div>
+
+      <div class="actions">
+        <button type="submit" [disabled]="loading">
+          {{ loading ? 'טוען...' : 'הפק דוח' }}
+        </button>
+        <button type="button" *ngIf="showResults" (click)="exportToCsv()">ייצוא ל-CSV</button>
+      </div>
+    </form>
+
+    <div *ngIf="error" class="error-message">
+      {{ error }}
+    </div>
+
+    <div class="loading-spinner" *ngIf="loading">
+      <div class="spinner"></div>
+      טוען נתונים...
+    </div>
+
+    <div class="results" *ngIf="showResults">
+      <h3>תוצאות הדוח</h3>
+      <table>
+        <thead>
+        <tr>
+          <th *ngFor="let header of headers">{{ header }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let row of reportData">
+          <td *ngFor="let header of headers">{{ getRowValue(row, header) }}</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
 </div>

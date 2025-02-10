@@ -2,6 +2,8 @@ body {
   font-family: Arial, sans-serif;
   margin: 0;
   background-color: #f0f0f0;
+  direction: rtl;
+  text-align: right;
 }
 .header {
   width: 100%;
@@ -16,20 +18,20 @@ body {
 .container {
   padding: 20px;
 }
-.form-group {
-  margin-bottom: 15px;
-}
-.form-group label {
-  display: block;
-  margin-bottom: 5px;
-}
-.form-group select, .form-group input {
-  width: 100%;
-  padding: 8px;
-  box-sizing: border-box;
-}
-.actions {
+.report-option {
   margin-bottom: 20px;
+}
+.report-option label {
+  font-size: 18px;
+  display: block;
+  margin-bottom: 10px;
+}
+.report-option select, .report-option input {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
 }
 .actions button {
   padding: 10px 20px;
@@ -41,12 +43,26 @@ body {
 .actions button:hover {
   background-color: #0056b3;
 }
-.report {
+.results {
   margin-top: 20px;
-  padding: 20px;
   background-color: #fff;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+.results table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+.results table, .results th, .results td {
   border: 1px solid #ddd;
 }
-canvas {
-  margin-top: 20px;
+.results th, .results td {
+  padding: 8px;
+  text-align: right;
+}
+.results th {
+  background-color: #007bff;
+  color: white;
 }
