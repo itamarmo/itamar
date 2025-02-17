@@ -111,3 +111,7 @@ async def delete_transport(transport: DeleteTransport):
 @app.get("/GetTransportByDate/")
 async def get_transport_by_date(startDate, endDate):
     return persistence.get_transports_by_date(startDate, endDate)
+
+@app.get("/GetInventoryMovements/")
+async def get_inventory_movements():
+    return persistence.get_inventory_movements()

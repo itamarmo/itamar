@@ -176,6 +176,7 @@ def get_orders():
     ]
     return orders
 
+
 def get_orders_by_date(start_date, end_date):
     query = (f'SELECT p.SKU, p.ProductName, o.Quantity, s.SupplierName, p.Notes, l.LocationName '
              f'FROM projectdb.order as o '
@@ -196,6 +197,7 @@ def get_orders_by_date(start_date, end_date):
         for row in results
     ]
     return orders
+
 
 def get_transports():
     query = (f'SELECT t.TransportID, t.TransportName, t.Type, t.Status, l.LocationName, t.CreateTime '
@@ -241,6 +243,7 @@ def delete_transport(transport_id):
 
     connection.commit()
 
+
 def get_transports_by_date(start_date, end_date):
     query = (f'SELECT t.TransportID, t.TransportName, t.Type, t.Status, l.LocationName, t.CreateTime '
              f'FROM transport as t INNER JOIN locations as l  ON l.LocationID = t.fk_transport_LocationId '
@@ -257,3 +260,44 @@ def get_transports_by_date(start_date, end_date):
         for row in results
     ]
     return transports
+
+
+def get_inventory_movements():
+    query = ('''
+    SELECT 
+    po.OrderID,
+    po.ItemName,
+    po.SKU,
+    po.Quantity,
+    po.RequiredDate,
+    s.SupplierName AS Supplier,
+    u.UserName AS RequestedBy,
+    CASE 
+        WHEN po.ProductID IS NOT NULL AND po.SupplierID IS NULL THEN 'Outgoing'
+        WHEN po.SupplierID IS NOT NULL THEN 'Incoming'
+        ELSE 'Unknown'
+    END AS InventoryMovementType,
+    p.ProductName AS RelatedProduct
+FROM 
+    projectdb.order po
+LEFT JOIN 
+    Suppliers s ON po.SupplierID = s.SupplierID
+LEFT JOIN 
+    users u ON po.UserID = u.UserID
+LEFT JOIN 
+    product p ON po.ProductID = p.ProductID
+ORDER BY 
+    po.RequiredDate DESC;
+    ''')
+    cursor.execute(query)
+
+    results = cursor.fetchall()
+
+    inventory_movements = [
+        {
+            key: (value if not isinstance(value, datetime) else value.strftime('%Y-%m-%d'))
+            for key, value in row.items()
+        }
+        for row in results
+    ]
+    return inventory_movements

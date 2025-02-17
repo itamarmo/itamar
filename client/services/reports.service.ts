@@ -26,10 +26,7 @@ export class ReportsService {
     return this.http.get<Transport[]>(`${this.baseUrl}/GetTransports`);
   }
 
-  getInventoryMovements(startDate: string, endDate: string): Observable<InventoryMovement[]> {
-    const params = new HttpParams()
-      .set('startDate', startDate)
-      .set('endDate', endDate);
-    return this.http.get<InventoryMovement[]>(`${this.baseUrl}/inventory-movements`, { params });
+  getInventoryMovements(): Observable<InventoryMovement[]> {
+    return this.http.get<InventoryMovement[]>(`${this.baseUrl}/GetInventoryMovements`);
   }
 }

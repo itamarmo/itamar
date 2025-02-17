@@ -30,9 +30,4 @@ export class OrdersService {
   addRequest(order: OrderRequest): Observable<OrderRequest> {
     return this.http.post<OrderRequest>(`${this.baseUrl}/AddOrder`, order);
   }
-
-  // Copy request for email (optional logic here if needed on the server-side)
-  copyToEmail(order: OrderRequest): Observable<any> {
-    return this.http.post(`${this.baseUrl}/email`, order);
-  }
 }

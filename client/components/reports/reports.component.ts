@@ -32,15 +32,11 @@ export interface Transport {
 }
 
 export interface InventoryMovement {
-  ProductName: string;
+  ItemName: string;
   SKU: string;
-  MovementType: 'IN' | 'OUT';
+  InventoryMovementType: 'Incoming' | 'Outgoing';
   Quantity: number;
-  FromLocation: string;
-  ToLocation: string;
-  MovementDate: string;
-  ReferenceNumber: string;
-  Notes: string;
+  RequiredDate: string;
 }
 
 @Component({
@@ -106,7 +102,7 @@ export class ReportsComponent implements OnInit {
         request$ = this.reportsService.getTransportStatus();
         break;
       case 'movements':
-        request$ = this.reportsService.getInventoryMovements(startDate, endDate);
+        request$ = this.reportsService.getInventoryMovements();
         break;
       default:
         this.error = 'סוג דוח לא תקין';
@@ -142,7 +138,7 @@ export class ReportsComponent implements OnInit {
         this.headers = ['סוג', 'שם', 'מיקום', 'סטטוס'];
         break;
       case 'movements':
-        this.headers = ['תאריך', 'מק"ט', 'שם מוצר', 'סוג תנועה', 'כמות', 'ממיקום', 'למיקום', 'מספר אסמכתא', 'הערות'];
+        this.headers = ['תאריך', 'מק"ט', 'שם מוצר', 'סוג תנועה', 'כמות'];
         break;
     }
   }
@@ -153,7 +149,8 @@ export class ReportsComponent implements OnInit {
       case 'מק"ט':
         return 'SKU' in row ? row.SKU : '';
       case 'שם מוצר':
-        return 'ProductName' in row ? row.ProductName : '';
+        return 'ProductName' in row ? row.ProductName :
+          'ItemName' in row ? row.ItemName : '';
       case 'כמות':
         return 'Quantity' in row ? row.Quantity.toString() : '';
       case 'הערות':
@@ -182,15 +179,9 @@ export class ReportsComponent implements OnInit {
 
       // InventoryMovement specific
       case 'תאריך':
-        return 'MovementDate' in row ? row.MovementDate : '';
+        return 'RequiredDate' in row ? row.RequiredDate : '';
       case 'סוג תנועה':
-        return 'MovementType' in row ? (row.MovementType === 'IN' ? 'כניסה' : 'יציאה') : '';
-      case 'ממיקום':
-        return 'FromLocation' in row ? this.getLocationName(row.FromLocation) : '';
-      case 'למיקום':
-        return 'ToLocation' in row ? this.getLocationName(row.ToLocation) : '';
-      case 'מספר אסמכתא':
-        return 'ReferenceNumber' in row ? row.ReferenceNumber : '';
+        return 'InventoryMovementType' in row ? (row.InventoryMovementType === 'Incoming' ? 'כניסה' : 'יציאה') : '';
 
       default:
         return '';
@@ -236,14 +227,14 @@ export class ReportsComponent implements OnInit {
 
   exportToCsv(): void {
     const csvRows = [
-      this.headers.join(','),
+      this.headers.join(','), // Header row
       ...this.reportData.map(row =>
         this.headers.map(header => `"${this.getRowValue(row, header)}"`).join(',')
       )
     ];
 
-    const csvContent = csvRows.join('\n');
-    const blob = new Blob([csvContent], {type: 'text/csv;charset=utf-8;'});
+    const csvContent = `\uFEFF${csvRows.join('\n')}`; // Add BOM to fix encoding
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;

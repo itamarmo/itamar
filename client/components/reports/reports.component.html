@@ -16,8 +16,7 @@
       </div>
 
       <div class="report-option"
-           *ngIf="reportForm.get('reportType')?.value === 'orders' ||
-                  reportForm.get('reportType')?.value === 'movements'">
+           *ngIf="reportForm.get('reportType')?.value === 'orders'">
         <label for="startDate">תאריך התחלה:</label>
         <input type="date" id="startDate" formControlName="startDate">
 
