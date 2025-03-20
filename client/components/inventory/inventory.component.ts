@@ -18,7 +18,7 @@ export class InventoryComponent implements OnInit {
     Quantity: 0,
     Location: '',
     LastUpdatedDate: '',
-    ExpiryDate: '',
+    ExpiryDate: null,
     Notes: ''
   };
   filteredInventory: any[] = [];
@@ -71,7 +71,7 @@ export class InventoryComponent implements OnInit {
       Quantity: 0,
       Location: '',
       LastUpdatedDate: '',
-      ExpiryDate: '',
+      ExpiryDate: null,
       Notes: ''
     };
   }
