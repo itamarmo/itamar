@@ -1,13 +1,14 @@
 import {Component} from '@angular/core';
 import {ServerService} from '../../services/server.service';
 import {FormsModule} from '@angular/forms';
+import {CommonModule, NgForOf} from '@angular/common';
 import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule,CommonModule],
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
