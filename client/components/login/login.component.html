@@ -28,7 +28,7 @@
       #passwordInput="ngModel"
     />
     <div class="error" *ngIf="passwordInput.invalid && passwordInput.touched">
-      Password is required
+      Password is invalid
     </div>
 
     <button type="submit" [disabled]="loginForm.invalid">Login</button>
