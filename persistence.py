@@ -7,7 +7,7 @@ try:
         host="localhost",
         port=3306,
         user="root",  # Replace with your database user
-        password="root",  # Replace with your database password
+        password="123456",  # Replace with your database password
         database="projectdb",
         use_pure=True
     )

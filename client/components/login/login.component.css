@@ -27,7 +27,7 @@ body {
 }
 
 .login-container .error {
-  color: red;
+    color: red;
 }
 
 .login-container button {
