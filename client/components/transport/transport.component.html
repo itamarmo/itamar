@@ -11,7 +11,7 @@
         <div></div> מטוס - {{ vehicle.TransportName }} (מיקום: {{ vehicle.LocationName }})
         <div>
           נוצר בתאריך
-          {{vehicle.CreateTime | date:'dd/MM/yyyy'}}
+          {{vehicle.CreateTime | date:'dd/MM/yyyy HH:mm'}}
         </div>
         <div class="actions">
           <button (click)="onEditVehicle(vehicle)" class="edit-btn">
@@ -30,7 +30,7 @@
         <div></div> רכב {{ vehicle.TransportName }} (מיקום: {{ vehicle.LocationName }})
         <div>
           נוצר בתאריך
-          {{vehicle.CreateTime | date:'dd/MM/yyyy'}}
+          {{vehicle.CreateTime | date:'dd/MM/yyyy HH:mm'}}
         </div>
         <div class="actions">
           <button (click)="onEditVehicle(vehicle)" class="edit-btn">

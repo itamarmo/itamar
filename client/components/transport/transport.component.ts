@@ -105,9 +105,12 @@ export class TransportComponent {
   }
 
   onEditVehicle(vehicle: any): void {
-    console.log('Edit vehicle:', vehicle);
-    // Add your logic to edit the vehicle, e.g., open a modal or navigate to an edit page.
-  }
+  console.log('Edit vehicle:', vehicle);
+  // הוספת לוגיקה לפתיחת דיאלוג עריכה או טופס
+  // אפשר להשתמש ב- Angular Material Dialog או טופס עם עורך
+  this.newVehicle = { ...vehicle }; // זה מעתיק את פרטי הרכב הנבחר לטופס ההוספה
+}
+
 
   onDeleteVehicle(vehicle: any): void {
     this.dataService.deleteVehicle(vehicle).subscribe({
