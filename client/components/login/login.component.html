@@ -13,7 +13,7 @@
       #usernameInput="ngModel"
     />
     <div class="error" *ngIf="usernameInput.invalid && usernameInput.touched">
-      Username is required
+      Username is required and Only English letters, numbers, and special characters are allowed
     </div>
 
     <input
@@ -28,7 +28,7 @@
       #passwordInput="ngModel"
     />
     <div class="error" *ngIf="passwordInput.invalid && passwordInput.touched">
-      Password is invalid
+      Password is invalid Only English letters, numbers, and special characters are allowed
     </div>
 
     <button type="submit" [disabled]="loginForm.invalid">Login</button>
