@@ -89,22 +89,32 @@ export class InventoryComponent implements OnInit {
     );
   }
 
-  sortItems(key: string): void {
-    this.sortKey = key;
-    this.sortDirection = !this.sortDirection;
-    this.filteredInventory.sort((a, b) => {
-      const valueA = a[key];
-      const valueB = b[key];
+  sortItems(): void {
+  if (!this.sortField) return; // אם לא נבחר שדה, לא נבצע מיון
 
-      if (typeof valueA === 'number' && typeof valueB === 'number') {
-        return this.sortDirection ? valueA - valueB : valueB - valueA;
-      } else if (valueA instanceof Date && valueB instanceof Date) {
-        return this.sortDirection ? valueA.getTime() - valueB.getTime() : valueB.getTime() - valueA.getTime();
-      } else {
-        return this.sortDirection ? valueA.localeCompare(valueB) : valueB.localeCompare(valueA);
-      }
-    });
-  }
+  this.filteredInventory.sort((a, b) => {
+    const valueA = a[this.sortField];
+    const valueB = b[this.sortField];
+
+    // אם המפתח הוא תאריך, נוודא שאנחנו ממיינים נכון (לפי זמן)
+    if (valueA instanceof Date && valueB instanceof Date) {
+      return valueA.getTime() - valueB.getTime(); // מיון לפי זמן
+    }
+
+    // מיון לפי מספרים (כמות לדוגמה)
+    if (typeof valueA === 'number' && typeof valueB === 'number') {
+      return valueA - valueB;
+    }
+
+    // מיון לפי מחרוזות (טקסט)
+    if (typeof valueA === 'string' && typeof valueB === 'string') {
+      return valueA.localeCompare(valueB);
+    }
+
+    return 0;
+  });
+}
+
 
   editItem(itemIndex: number) {
 

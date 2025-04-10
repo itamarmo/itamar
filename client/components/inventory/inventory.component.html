@@ -48,13 +48,13 @@
 
   <!-- Sort -->
   <div class="sort-container">
-    <select [(ngModel)]="sortField">
-      <option value="productCode">מיין לפי מק"ט</option>
-      <option value="productName">מיין לפי שם מוצר</option>
-      <option value="quantity">מיין לפי כמות</option>
-      <option value="location">מיין לפי מיקום</option>
-      <option value="lastDate">מיין לפי תאריך אחרון</option>
-      <option value="expiryDate">מיין לפי תאריך תוקף</option>
+    <select [(ngModel)]="sortField" (change)="sortItems()">
+		<option value="SKU">מיין לפי מק"ט</option>
+		<option value="ProductName">מיין לפי שם מוצר</option>
+		<option value="Quantity">מיין לפי כמות</option>
+		<option value="Location">מיין לפי מיקום</option>
+		<option value="LastUpdatedDate">מיין לפי תאריך אחרון</option>
+		<option value="ExpiryDate">מיין לפי תאריך תוקף</option>
     </select>
   </div>
 
