@@ -111,6 +111,14 @@ export class InventoryComponent implements OnInit {
   }
 
   isExpired(expiryDate: any): boolean {
-    return false;
+  if (!expiryDate) {
+    return false; // אם לא צוין תאריך תפוגה, נניח שזה לא פג תוקף
   }
+  
+  const currentDate = new Date(); // מקבלים את התאריך הנוכחי
+  const expiry = new Date(expiryDate); // הופכים את תאריך התפוגה לאובייקט תאריך
+
+  return expiry < currentDate; // אם תאריך התפוגה קטן מהתאריך הנוכחי, זה פג תוקף
+}
+
 }
