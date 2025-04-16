@@ -26,7 +26,7 @@
 
     <h4>כלי רכב</h4>
     <ul class="vehicle-list">
-      <li *ngFor="let vehicle of vehicles" [class]="'status ' + vehicle.Status">
+      <li *ngFor="let vehicle of cars" [class]="'status ' + vehicle.Status">
         <div></div> רכב {{ vehicle.TransportName }} (מיקום: {{ vehicle.LocationName }})
         <div>
           נוצר בתאריך

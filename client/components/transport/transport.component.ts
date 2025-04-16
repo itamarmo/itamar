@@ -32,12 +32,26 @@ export class TransportComponent {
       next: (data) => {
         this.vehicles = data;
         this.planes = this.vehicles.filter((v) => v.Type === 'Plane');
-        this.cars = this.vehicles.filter((v) => v.Type === 'Vehicle');
+		//this.cars = this.vehicles.filter(v => !this.planes.some(p => p.id === v.id));
+		this.cars = this.vehicles.filter((v) => v.Type === 'Vehicle');
+        //this.cars = this.vehicles.filter((v) => v.Type === 'Vehicle' && !this.planes.some(p => p.id === v.id));
+		console.log('cars:', this.cars);
+		console.log('planes:', this.planes);
+
         this.updateCharts();
       },
       error: (err) => console.error('Error fetching vehicles:', err),
     });
   }
+  
+//  deleteVehicle(): void {
+//	this.dataService.deleteVehicle(this.newVehicle).subscribe({
+//      next: () => {
+//        this.loadVehicles(); // Refresh the list
+//      },
+//      error: (err) => console.error('Error adding vehicle:', err),
+//    });
+//  }
 
   addVehicle(): void {
     this.dataService.addVehicle(this.newVehicle).subscribe({
@@ -109,8 +123,14 @@ export class TransportComponent {
   // הוספת לוגיקה לפתיחת דיאלוג עריכה או טופס
   // אפשר להשתמש ב- Angular Material Dialog או טופס עם עורך
   this.newVehicle = { ...vehicle }; // זה מעתיק את פרטי הרכב הנבחר לטופס ההוספה
+  
+  this.dataService.deleteVehicle(vehicle).subscribe({
+      next: () => {
+        this.loadVehicles(); // Refresh the list
+      },
+      error: (err) => console.error('Error adding vehicle:', err),
+    });
 }
-
 
   onDeleteVehicle(vehicle: any): void {
     this.dataService.deleteVehicle(vehicle).subscribe({
