@@ -36,11 +36,11 @@ export class InventoryComponent implements OnInit {
 
   fetchInventory(): void {
     this.inventoryService.getInventory().subscribe((data) => {
-      this.inventory = data.map(item => ({
-        ...item,
-        lastDate: new Date(item.lastDate),
-        expiryDate: item.expiryDate ? new Date(item.expiryDate) : null
-      }));
+     this.inventory = data.map(item => ({
+	  ...item,
+	  LastUpdatedDate: new Date(item.LastUpdatedDate),
+	  ExpiryDate: item.ExpiryDate ? new Date(item.ExpiryDate) : null
+	}));
       this.filteredInventory = [...this.inventory];
     });
   }
