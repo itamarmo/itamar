@@ -45,7 +45,18 @@ export class InventoryComponent implements OnInit {
     });
   }
 
-  addItem(): void {
+  addItem(): void {	  	
+	   // בדיקה אם יש פריט זהה במלאי
+	  const existingItem = this.inventory.find(item => 
+		item.ProductName === this.newItem.ProductName &&
+		item.SKU === this.newItem.SKU &&
+		item.Location === this.newItem.Location
+	  );
+
+	  if (existingItem) {
+		alert('פריט עם אותם נתונים ומיקום כבר קיים במלאי.');
+		return;
+	  }
     if (!this.newItem.ProductName || !this.newItem.SKU || !this.newItem.Quantity || !this.newItem.Location
       || !this.newItem.LastUpdatedDate) {
       alert('יש למלא את כל השדות פרט לשדה תאריך תוקף והערות.');
