@@ -208,7 +208,7 @@ def get_transports():
 
     transports = [
         {
-            key: (value if not isinstance(value, datetime) else value.strftime('%Y-%m-%d'))
+            key: (value if not isinstance(value, datetime) else value.strftime('%Y-%m-%d %H:%M:%S'))
             for key, value in row.items()
         }
         for row in results
@@ -254,7 +254,7 @@ def get_transports_by_date(start_date, end_date):
 
     transports = [
         {
-            key: (value if not isinstance(value, datetime) else value.strftime('%Y-%m-%d'))
+            key: (value if not isinstance(value, datetime) else value.strftime('%Y-%m-%d %H:%M:%S'))
             for key, value in row.items()
         }
         for row in results
