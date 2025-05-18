@@ -47,11 +47,17 @@ export class InventoryComponent implements OnInit {
 
   addItem(): void {	  	
 	   // בדיקה אם יש פריט זהה במלאי
-	  const existingItem = this.inventory.find(item => 
-		item.ProductName === this.newItem.ProductName &&
-		item.SKU === this.newItem.SKU &&
-		item.Location === this.newItem.Location
-	  );
+	  //const existingItem = this.inventory.find(item => 
+		//item.ProductName === this.newItem.ProductName &&
+		//item.SKU === this.newItem.SKU &&
+		//item.Location === this.newItem.Location
+	 // );
+	 const existingItem = this.inventory.find(item => 
+  item.ProductName.trim().toLowerCase() === this.newItem.ProductName.trim().toLowerCase() &&
+  item.SKU.trim().toLowerCase() === this.newItem.SKU.trim().toLowerCase() &&
+  item.ItemLocation.trim().toLowerCase() === this.newItem.Location.trim().toLowerCase()
+);
+
 
 	  if (existingItem) {
 		alert('פריט עם אותם נתונים ומיקום כבר קיים במלאי.');
