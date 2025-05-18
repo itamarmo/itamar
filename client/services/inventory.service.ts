@@ -20,7 +20,10 @@ export class InventoryService {
   }
 
   deleteInventory(id: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/DeleteInventory/${id}`);
+    //return this.http.delete(`${this.apiUrl}/DeleteInventory/${id}`);
+	return this.http.post<any>(`${this.apiUrl}/DeleteInventory`, {
+      ProductID: id
+    });
   }
 
   editInventory(id: number, item: any): Observable<any> {

@@ -69,11 +69,24 @@ export class InventoryComponent implements OnInit {
     });
   }
 
-  deleteItem(id: number): void {
-    this.inventoryService.deleteInventory(id).subscribe(() => {
-      this.fetchInventory();
-    });
+  //deleteItem(i: number): void {
+//	console.log("index:", i);
+  //  this.inventoryService.deleteInventory(i).subscribe(() => {
+  //    this.fetchInventory();
+  //  });
+  //}
+  
+  deleteItem(item: any): void {
+  if (!item.ProductID) {
+    alert("לא נמצא מזהה מוצר למחיקה.");
+    return;
   }
+
+  this.inventoryService.deleteInventory(item.ProductID).subscribe(() => {
+    this.fetchInventory();
+  });
+}
+
 
   clearForm(): void {
     this.newItem = {

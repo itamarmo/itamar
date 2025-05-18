@@ -32,7 +32,7 @@ def look_for_user(username, password):
 
 
 def get_inventory():
-    query = (f'SELECT SKU, ProductName, Quantity, ItemLocation, LastUpdatedDate, ExpiryDate, Notes '
+    query = (f'SELECT ProductID, SKU, ProductName, Quantity, ItemLocation, LastUpdatedDate, ExpiryDate, Notes '
              f'FROM product')
     cursor.execute(query)
 
@@ -238,6 +238,18 @@ def delete_transport(transport_id):
                 """
 
     data = [transport_id]
+
+    cursor.execute(query, data)
+
+    connection.commit()
+    
+    
+def delete_inventory(inventory_id):
+    query = """
+                    DELETE FROM `product` WHERE ProductID = %s
+                """
+
+    data = [inventory_id]
 
     cursor.execute(query, data)
 

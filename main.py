@@ -49,6 +49,9 @@ class Transport(BaseModel):
 class DeleteTransport(BaseModel):
     TransportID: int
 
+class DeleteInventory(BaseModel):
+    ProductID: int
+
 
 @app.get("/login/{user}/{password}/")
 async def login(user: str, password: str):
@@ -115,3 +118,7 @@ async def get_transport_by_date(startDate, endDate):
 @app.get("/GetInventoryMovements/")
 async def get_inventory_movements():
     return persistence.get_inventory_movements()
+
+@app.post("/DeleteInventory")
+async def delete_inventory(product: DeleteInventory):
+    persistence.delete_inventory(product.ProductID)
