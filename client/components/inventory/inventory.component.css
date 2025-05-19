@@ -1,99 +1,171 @@
-body {
-  font-family: Arial, sans-serif;
+* {
+  box-sizing: border-box;
   margin: 0;
-  background-color: #f0f0f0;
+  padding: 0;
 }
 
+body {
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  background-color: #eef2f5;
+  direction: rtl;
+  font-size: 17px;
+}
+
+/* כותרת עליונה */
 .header {
-  width: 100%;
   background-color: #007bff;
-  padding: 10px 20px;
+  color: white;
+  padding: 15px 30px;
   display: flex;
   justify-content: space-between;
-  text-align: center;
-  color: #fff;
+  align-items: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 .header .title {
-  font-size: 24px;
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  font-weight: 700;
+  font-size: 32px;
+  color: white;
+  /* ללא אנימציה או אייקון */
 }
+
 .header img {
   height: 50px;
 }
+
+/* מיכל התוכן */
 .container {
-  padding: 20px;
+  max-width: 1100px;
+  margin: 40px auto;
+  background-color: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+/* טופס */
+form {
+  margin-bottom: 30px;
 }
 
 .form-group {
-  margin-bottom: 15px;
+  margin-bottom: 20px;
 }
 
 .form-group label {
   display: block;
-  margin-bottom: 5px;
+  font-weight: 600;
+  margin-bottom: 6px;
 }
 
-.form-group input, .form-group select, .form-group textarea {
+/* כל שדות הקלט */
+.form-group input,
+.form-group select,
+.form-group textarea {
+  padding: 10px 12px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  transition: border 0.3s;
+}
+
+/* שדות רגילים – ברירת מחדל */
+input[type="text"],
+input[type="number"],
+input[type="date"],
+select,
+textarea {
   width: 100%;
-  padding: 8px;
-  box-sizing: border-box;
 }
 
+/* שדות קטנים – מק״ט, כמות ותאריכים, שם מוצר, מיקום, חיפוש, מיון */
+input#productCode,
+input#quantity,
+input#lastDate,
+input#expiryDate,
+input#productName,
+input#location,
+input#search,
+select#sort {
+  width: 50%;
+}
+
+/* הערות – גובה קבוע */
 .form-group textarea {
   height: 100px;
 }
 
+/* מיקוד */
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+/* כפתור הוספה */
 .actions {
-  margin-bottom: 20px;
+  text-align: left;
+  margin-top: 10px;
 }
 
 .actions button {
-  padding: 10px 20px;
+  padding: 12px 24px;
   background-color: #007bff;
   color: white;
+  font-size: 16px;
   border: none;
+  border-radius: 8px;
   cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 .actions button:hover {
   background-color: #0056b3;
 }
 
+/* חיפוש ומיון */
+.search-container,
+.sort-container {
+  margin-bottom: 20px;
+  width: 50%;
+}
+
+.search-container input,
+.sort-container select {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+/* טבלה */
 table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 20px;
-  text-align: right;
-}
-
-table, th, td {
-  border: 1px solid #ddd;
-  direction: rtl !important;
-  text-align: right;
-}
-
-tr {
-  direction: rtl !important;
-  text-align: right;
+  margin-top: 10px;
+  font-size: 18px; /* טקסט גדול יותר בטבלה */
 }
 
 th, td {
-  padding: 8px;
+  padding: 12px;
+  border: 1px solid #ddd;
   text-align: right;
 }
 
 th {
   background-color: #007bff;
   color: white;
-  cursor: pointer;
+  font-size: 20px;
 }
 
-.icon {
-  cursor: pointer;
-  color: #007bff;
-  margin: 0 5px;
+tr:nth-child(even) {
+  background-color: #f9f9f9;
 }
 
+/* סטטוס תוקף */
 .expired {
   color: red;
   font-weight: bold;
@@ -104,24 +176,46 @@ th {
   font-weight: bold;
 }
 
-.search-container {
-  margin-bottom: 20px;
+/* כפתורי עריכה ומחיקה */
+td button {
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  margin: 0 4px;
 }
 
-.search-container input {
-  width: 100%;
-  padding: 10px;
-  font-size: 16px;
-  border: 1px solid #ddd;
+td button:hover {
+  transform: scale(1.1);
 }
 
-.sort-container {
-  margin-bottom: 20px;
-}
+/* רספונסיביות בסיסית */
+@media (max-width: 768px) {
+  .container {
+    padding: 20px;
+  }
 
-.sort-container select {
-  width: 100%;
-  padding: 10px;
-  font-size: 16px;
-  border: 1px solid #ddd;
+  .header .title {
+    font-size: 22px;
+  }
+
+  th, td {
+    font-size: 14px;
+  }
+
+  input#productCode,
+  input#quantity,
+  input#lastDate,
+  input#expiryDate,
+  input#productName,
+  input#location,
+  input#search,
+  select#sort {
+    width: 100%;
+  }
+
+  .search-container,
+  .sort-container {
+    width: 100%;
+  }
 }
