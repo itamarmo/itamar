@@ -1,39 +1,42 @@
-<div class="login-container">
-  <h2>Login</h2>
-  <form #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)">
-    <input
-      type="text"
-      id="username"
-      placeholder="Username"
-      required
-      pattern="[A-Za-z0-9!@#$%^&*]+"
-      title="Only English letters, numbers, and special characters are allowed"
-      [(ngModel)]="username"
-      name="username"
-      #usernameInput="ngModel"
-    />
-    <div class="error" *ngIf="usernameInput.invalid && usernameInput.touched">
-      Username is required and Only English letters, numbers, and special characters are allowed
-    </div>
+<div class="login-page">
+  <div class="login-container">
+    <h2>Login</h2>
+    <form #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)">
+      <input
+        type="text"
+        id="username"
+        placeholder="Username"
+        required
+        pattern="[A-Za-z0-9!@#$%^&*]+"
+        title="Only English letters, numbers, and special characters are allowed"
+        [(ngModel)]="username"
+        name="username"
+        #usernameInput="ngModel"
+      />
+      <div class="error" *ngIf="usernameInput.invalid && usernameInput.touched">
+        Username is required and must contain only English letters, numbers, or special characters
+      </div>
 
-    <input
-      type="password"
-      id="password"
-      placeholder="Password"
-      required
-      pattern="[A-Za-z0-9!@#$%^&*]+"
-      title="Only English letters, numbers, and special characters are allowed"
-      [(ngModel)]="password"
-      name="password"
-      #passwordInput="ngModel"
-    />
-    <div class="error" *ngIf="passwordInput.invalid && passwordInput.touched">
-      Password is invalid Only English letters, numbers, and special characters are allowed
-    </div>
+      <input
+        type="password"
+        id="password"
+        placeholder="Password"
+        required
+        pattern="[A-Za-z0-9!@#$%^&*]+"
+        title="Only English letters, numbers, and special characters are allowed"
+        [(ngModel)]="password"
+        name="password"
+        #passwordInput="ngModel"
+      />
+      <div class="error" *ngIf="passwordInput.invalid && passwordInput.touched">
+        Password is required and must contain only English letters, numbers, or special characters
+      </div>
 
-    <button type="submit" [disabled]="loginForm.invalid">Login</button>
-  </form>
-  <div class="reset-password">
-   <!-- <a href="#">Forgot Password?</a>-->
+      <button type="submit" [disabled]="loginForm.invalid">Login</button>
+    </form>
+
+    <div class="reset-password">
+      <!-- <a href="#">Forgot Password?</a> -->
+    </div>
   </div>
 </div>

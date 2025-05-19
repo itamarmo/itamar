@@ -1,57 +1,95 @@
-body {
-  font-family: Arial, sans-serif;
+/* אפס ברירת מחדל */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #e3f2fd, #ffffff);
+}
+
+/* ממרכז את תיבת ההתחברות אופקית ואנכית */
+.login-page {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  background-color: #f0f0f0;
+  height: 100vh; /* גובה מלא */
+  width: 100vw;  /* רוחב מלא */
 }
 
+/* תיבת ההתחברות */
 .login-container {
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  width: 350px;
+  max-width: 90%;
 }
 
 .login-container h2 {
-  margin-bottom: 20px;
+  margin-bottom: 24px;
+  font-size: 26px;
+  text-align: center;
+  color: #333;
 }
 
 .login-container input {
   width: 100%;
-  padding: 10px;
-  margin: 10px 0;
+  padding: 12px;
+  margin: 12px 0;
+  font-size: 16px;
   border: 1px solid #ccc;
-  border-radius: 4px;
+  border-radius: 8px;
+  transition: border-color 0.3s;
+}
+
+.login-container input:focus {
+  border-color: #007bff;
+  outline: none;
 }
 
 .login-container .error {
-    color: red;
+  color: #d32f2f;
+  font-size: 13px;
+  margin-top: -8px;
+  margin-bottom: 10px;
 }
 
 .login-container button {
   width: 100%;
-  padding: 10px;
+  padding: 12px;
   background-color: #007bff;
   color: #fff;
   border: none;
-  border-radius: 4px;
+  border-radius: 8px;
   cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
 }
 
 .login-container button:hover {
   background-color: #0056b3;
 }
 
+.login-container button:disabled {
+  background-color: #a0c4ff;
+  cursor: not-allowed;
+}
+
 .login-container .reset-password {
-  margin-top: 10px;
+  margin-top: 16px;
   text-align: center;
 }
 
 .login-container .reset-password a {
   color: #007bff;
   text-decoration: none;
+  font-size: 14px;
 }
 
 .login-container .reset-password a:hover {
