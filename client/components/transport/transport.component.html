@@ -1,54 +1,54 @@
 <div class="header">
   <div class="title">בקרת כלי תחבורה</div>
-  <img src="assets/images/logo.png" alt="System Logo">
+  <img src="assets/images/logo.png" alt="System Logo" />
 </div>
+
 <div class="container">
   <div class="sidebar">
     <h3>רשימת כלי תחבורה</h3>
+
     <h4>מטוסים</h4>
-    <ul class="vehicle-list">
-      <li *ngFor="let vehicle of planes" [class]="'status ' + vehicle.Status">
-        <div></div> מטוס - {{ vehicle.TransportName }} (מיקום: {{ vehicle.LocationName }})
-        <div>
-          נוצר בתאריך
-          {{vehicle.CreateTime | date:'dd/MM/yyyy HH:mm'}}
+    <div class="card-grid">
+      <div *ngFor="let vehicle of planes" class="card" [ngClass]="vehicle.Status.toLowerCase()">
+        <div class="card-icon">✈️</div>
+        <div class="card-content">
+          <h4>מטוס - {{ vehicle.TransportName }}</h4>
+          <p>מיקום: {{ vehicle.LocationName }}</p>
+          <p>נוצר: {{ vehicle.CreateTime | date:'dd/MM/yyyy HH:mm' }}</p>
+          <p class="status-label">{{ vehicle.Status }}</p>
         </div>
-        <div class="actions">
-          <button (click)="onEditVehicle(vehicle)" class="edit-btn">
-            <i class="fas fa-pencil-alt"></i> ערוך
-          </button>
-          <button (click)="onDeleteVehicle(vehicle)" class="delete-btn">
-            <i class="fas fa-trash-alt"></i> מחק
-          </button>
+        <div class="card-actions">
+          <button (click)="onEditVehicle(vehicle)" class="edit-btn">✏️ ערוך</button>
+          <button (click)="onDeleteVehicle(vehicle)" class="delete-btn">🗑️ מחק</button>
         </div>
-      </li>
-    </ul>
+      </div>
+    </div>
 
     <h4>כלי רכב</h4>
-    <ul class="vehicle-list">
-      <li *ngFor="let vehicle of cars" [class]="'status ' + vehicle.Status">
-        <div></div> רכב {{ vehicle.TransportName }} (מיקום: {{ vehicle.LocationName }})
-        <div>
-          נוצר בתאריך
-          {{vehicle.CreateTime | date:'dd/MM/yyyy HH:mm'}}
+    <div class="card-grid">
+      <div *ngFor="let vehicle of cars" class="card" [ngClass]="vehicle.Status.toLowerCase()">
+        <div class="card-icon">🚗</div>
+        <div class="card-content">
+          <h4>רכב - {{ vehicle.TransportName }}</h4>
+          <p>מיקום: {{ vehicle.LocationName }}</p>
+          <p>נוצר: {{ vehicle.CreateTime | date:'dd/MM/yyyy HH:mm' }}</p>
+          <p class="status-label">{{ vehicle.Status }}</p>
         </div>
-        <div class="actions">
-          <button (click)="onEditVehicle(vehicle)" class="edit-btn">
-            <i class="fas fa-pencil-alt"></i> ערוך
-          </button>
-          <button (click)="onDeleteVehicle(vehicle)" class="delete-btn">
-            <i class="fas fa-trash-alt"></i> מחק
-          </button>
+        <div class="card-actions">
+          <button (click)="onEditVehicle(vehicle)" class="edit-btn">✏️ ערוך</button>
+          <button (click)="onDeleteVehicle(vehicle)" class="delete-btn">🗑️ מחק</button>
         </div>
-      </li>
-    </ul>
+      </div>
+    </div>
+
     <div class="add-vehicle">
-      <h3>הוסף כלי תחבורה</h3>
+      <h3>דיווח סטאטוס כלי</h3>
+      <!-- אפשר להפוך לטופס במודל נפרד -->
       <select [(ngModel)]="newVehicle.Type">
         <option value="Plane">מטוס</option>
         <option value="Vehicle">רכב</option>
       </select>
-      <input type="text" [(ngModel)]="newVehicle.TransportName" placeholder="שם הכלי">
+      <input type="text" [(ngModel)]="newVehicle.TransportName" placeholder="שם הכלי" />
       <select [(ngModel)]="newVehicle.LocationName">
         <option value="Megiddo">מגידו</option>
         <option value="Kedma">קדמה</option>
@@ -62,6 +62,7 @@
       <button (click)="addVehicle()">הוסף</button>
     </div>
   </div>
+
   <div class="main">
     <h3>Dashboard</h3>
     <div class="chart-container">
