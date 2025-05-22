@@ -2,71 +2,90 @@
   <div class="title">יצירת בקשה להזמנת רכש</div>
   <img src="assets/images/logo.png" alt="System Logo">
 </div>
+
 <div class="container">
   <div class="actions">
     <button (click)="createOrderRequest()">צור בקשת הזמנה</button>
   </div>
+
   <div class="form-group">
     <label for="productName">שם מוצר</label>
     <input [(ngModel)]="productName" id="productName" list="productNames" required>
-    <datalist id="productNames">
-      <!-- שמות מוצרים יתווספו כאן מבסיס הנתונים -->
-    </datalist>
+    <datalist id="productNames"></datalist>
   </div>
+
   <div class="form-group">
     <label for="productCode">מק"ט</label>
     <input [(ngModel)]="SKU" id="productCode" list="productCodes" required>
-    <datalist id="productCodes">
-      <!-- מק"טים יתווספו כאן מבסיס הנתונים -->
-    </datalist>
+    <datalist id="productCodes"></datalist>
   </div>
+
   <div class="form-group">
     <label for="quantity">כמות</label>
     <input [(ngModel)]="quantity" id="quantity" type="number" min="1" required>
   </div>
+
   <div class="form-group">
     <label for="supplier">ספק מועדף</label>
-    <input [(ngModel)]="supplier" id="supplier" list="suppliers" required>
-    <datalist id="suppliers">
-      <!-- שמות ספקים יתווספו כאן מבסיס הנתונים -->
-    </datalist>
+	<select id="supplier" [(ngModel)]="supplier" id="supplier" list="suppliers" required>
+	 <option value="Velocity Transport">Velocity Transport</option>
+     <option value="Skyline Freight">Skyline Freight</option>
+	 <option value="TurboLogistics">TurboLogistics</option>
+     <option value="Pioneer Cargo">Pioneer Cargo</option>
+	 <option value="RapidLink Shipping">RapidLink Shipping</option>
+     <option value="Silverline Logistics">Silverline Logistics</option>
+	 <option value="BlueWave Transport">BlueWave Transport</option>
+     <option value="MaxMove Solutions">MaxMove Solutions</option>
+	 <option value="OceanGate Freight">OceanGate Freight</option>
+     <option value="StarFleet Shipping">StarFleet Shipping</option>
+	 <option value="FastLane Freight">FastLane Freight</option>
+	 <option value="QuickShift Transport">QuickShift Transport</option>
+	 <option value="PrimeRoute Logistics">PrimeRoute Logistics</option>
+     <option value="LogiMax Freight">LogiMax Freight</option>
+     <option value="CargoCore Solutions">CargoCore Solutions</option>
+    </select>
+    <!--<input [(ngModel)]="supplier" id="supplier" list="suppliers" required>
+    <datalist id="suppliers"></datalist>-->
   </div>
+
   <div class="form-group">
     <label for="location">מיקום</label>
-
     <select id="location" [(ngModel)]="location" name="location" required>
       <option value="Megiddo">מגידו</option>
       <option value="Kedma">קדמה</option>
     </select>
   </div>
+
   <div class="form-group">
     <label for="notes">הערות</label>
     <textarea [(ngModel)]="notes" id="notes"></textarea>
   </div>
+
   <div class="actions">
     <button (click)="copyToEmail()">העתק למייל</button>
     <button (click)="openEmailClient()">פתח מייל</button>
   </div>
+
   <table>
     <thead>
-    <tr>
-      <th>שם מוצר</th>
-      <th>מק"ט</th>
-      <th>כמות</th>
-      <th>ספק מועדף</th>
-      <th>מיקום</th>
-      <th>הערות</th>
-    </tr>
+      <tr>
+        <th>שם מוצר</th>
+        <th>מק"ט</th>
+        <th>כמות</th>
+        <th>ספק מועדף</th>
+        <th>מיקום</th>
+        <th>הערות</th>
+      </tr>
     </thead>
     <tbody>
-    <tr *ngFor="let request of previousRequests">
-      <td>{{ request.ProductName }}</td>
-      <td>{{ request.SKU }}</td>
-      <td>{{ request.Quantity }}</td>
-      <td>{{ request.SupplierName }}</td>
-      <td>{{ request.LocationName }}</td>
-      <td>{{ request.Notes }}</td>
-    </tr>
+      <tr *ngFor="let request of previousRequests">
+        <td>{{ request.ProductName }}</td>
+        <td>{{ request.SKU }}</td>
+        <td>{{ request.Quantity }}</td>
+        <td>{{ request.SupplierName }}</td>
+        <td>{{ request.LocationName }}</td>
+        <td>{{ request.Notes }}</td>
+      </tr>
     </tbody>
   </table>
 </div>

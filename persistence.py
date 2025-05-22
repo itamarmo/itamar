@@ -14,7 +14,8 @@ try:
 except Exception as e:
     print(e)
 
-cursor = connection.cursor(dictionary=True)
+cursor = connection.cursor(buffered=True, dictionary=True)
+#cursor = connection.cursor(dictionary=True)
 
 
 def look_for_user(username, password):
@@ -64,16 +65,16 @@ def get_last_product_id():
     cursor.execute(query)
 
     result = cursor.fetchone()
-    highest_product_id = result['HighestProductID'] if result else None
+    highest_product_id = result['HighestProductID'] if result else 0
 
     return highest_product_id
 
 
 def add_inventory(product_name, sku, quantity, location, last_updated_date, expiry_date, notes):
     query = """
-                    INSERT INTO product (ProductId, ProductName, SKU, Quantity, ItemLocation, LastUpdatedDate, ExpiryDate, Notes, FK_LocationID)
-                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
-                """
+        INSERT INTO product (ProductId, ProductName, SKU, Quantity, ItemLocation, LastUpdatedDate, ExpiryDate, Notes, FK_LocationID)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+    """
 
     # Convert dates if necessary (assuming they are datetime objects or strings in 'YYYY-MM-DD' format)
     if isinstance(last_updated_date, datetime):
@@ -87,10 +88,8 @@ def add_inventory(product_name, sku, quantity, location, last_updated_date, expi
     data = (get_last_product_id() + 1, product_name, sku, quantity, location, last_updated_date, expiry_date, notes,
             location_id)
 
-    # Execute the query
     cursor.execute(query, data)
 
-    # Commit the transaction
     connection.commit()
 
 
@@ -99,7 +98,7 @@ def get_last_order_id():
     cursor.execute(query)
 
     result = cursor.fetchone()
-    highest_order_id = result['HighestOrderID'] if result else None
+    highest_order_id = result['HighestOrderID'] if result and result['HighestOrderID'] is not None else 0
 
     return highest_order_id
 
@@ -109,7 +108,7 @@ def get_last_transport_id():
     cursor.execute(query)
 
     result = cursor.fetchone()
-    highest_transport_id = result['HighestTransportID'] if result else None
+    highest_transport_id = result['HighestTransportID'] if result and result['HighestTransportID'] is not None else 0
 
     return highest_transport_id
 
@@ -121,7 +120,6 @@ def get_supplier_id(supplier_name):
     if result:
         return result['SupplierID']
     else:
-        # Handle case where LocationName is not found
         raise ValueError("Supplier not found")
 
 
@@ -132,7 +130,6 @@ def get_product_id(product_name):
     if result:
         return result['ProductID']
     else:
-        # Handle case where LocationName is not found
         raise ValueError("Product not found")
 
 
@@ -143,9 +140,9 @@ def add_order(sku, product_name, quantity, supplier_name, location_name):
     product_id = get_product_id(product_name)
 
     query = """
-                    INSERT INTO `order` (OrderID, ItemName, SKU, ProductID, Quantity, RequiredDate, SupplierID, LocationID, UserID)
-                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
-                """
+        INSERT INTO `order` (OrderID, ItemName, SKU, ProductID, Quantity, RequiredDate, SupplierID, LocationID, UserID)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+    """
 
     required_date = datetime.now().strftime('%Y-%m-%d')
 
@@ -158,7 +155,7 @@ def add_order(sku, product_name, quantity, supplier_name, location_name):
 
 def get_orders():
     query = (f'SELECT p.SKU, p.ProductName, o.Quantity, s.SupplierName, p.Notes, l.LocationName '
-             f'FROM projectdb.order as o '
+             f'FROM projectdb.`order` as o '
              f'INNER JOIN suppliers as s ON o.SupplierID = s.SupplierID '
              f'INNER JOIN product as p ON o.ProductID = p.ProductID '
              f'INNER JOIN locations as l ON o.LocationID = l.LocationID')
@@ -179,7 +176,7 @@ def get_orders():
 
 def get_orders_by_date(start_date, end_date):
     query = (f'SELECT p.SKU, p.ProductName, o.Quantity, s.SupplierName, p.Notes, l.LocationName '
-             f'FROM projectdb.order as o '
+             f'FROM projectdb.`order` as o '
              f'INNER JOIN suppliers as s ON o.SupplierID = s.SupplierID '
              f'INNER JOIN product as p ON o.ProductID = p.ProductID '
              f'INNER JOIN locations as l ON o.LocationID = l.LocationID '
@@ -221,9 +218,9 @@ def add_transport(transport_name, transport_type, location_name, status):
     location_id = get_location_id(location_name)
 
     query = """
-                    INSERT INTO `transport` (TransportID, TransportName, Type, Status, fk_transport_LocationId, CreateTime)
-                    VALUES (%s, %s, %s, %s, %s, %s)
-                """
+        INSERT INTO `transport` (TransportID, TransportName, Type, Status, fk_transport_LocationId, CreateTime)
+        VALUES (%s, %s, %s, %s, %s, %s)
+    """
 
     data = (transport_id, transport_name, transport_type, status, location_id, datetime.now())
 
@@ -234,8 +231,8 @@ def add_transport(transport_name, transport_type, location_name, status):
 
 def delete_transport(transport_id):
     query = """
-                    DELETE FROM `transport` WHERE TransportID = %s
-                """
+        DELETE FROM `transport` WHERE TransportID = %s
+    """
 
     data = [transport_id]
 
@@ -246,8 +243,8 @@ def delete_transport(transport_id):
     
 def delete_inventory(inventory_id):
     query = """
-                    DELETE FROM `product` WHERE ProductID = %s
-                """
+        DELETE FROM `product` WHERE ProductID = %s
+    """
 
     data = [inventory_id]
 
@@ -258,8 +255,8 @@ def delete_inventory(inventory_id):
 
 def get_transports_by_date(start_date, end_date):
     query = (f'SELECT t.TransportID, t.TransportName, t.Type, t.Status, l.LocationName, t.CreateTime '
-             f'FROM transport as t INNER JOIN locations as l  ON l.LocationID = t.fk_transport_LocationId '
-             f'WHERE o.RequiredDate >= %s AND o.RequiredDate <= %s')
+             f'FROM transport as t INNER JOIN locations as l ON l.LocationID = t.fk_transport_LocationId '
+             f'WHERE t.CreateTime >= %s AND t.CreateTime <= %s')
     cursor.execute(query, (start_date, end_date))
 
     results = cursor.fetchall()
@@ -277,37 +274,38 @@ def get_transports_by_date(start_date, end_date):
 def get_inventory_movements():
     query = ('''
     SELECT 
-    po.OrderID,
-    po.ItemName,
-    po.SKU,
-    po.Quantity,
-    po.RequiredDate,
-    s.SupplierName AS Supplier,
-    u.UserName AS RequestedBy,
-    CASE 
-        WHEN po.ProductID IS NOT NULL AND po.SupplierID IS NULL THEN 'Outgoing'
-        WHEN po.SupplierID IS NOT NULL THEN 'Incoming'
-        ELSE 'Unknown'
-    END AS InventoryMovementType,
-    p.ProductName AS RelatedProduct
-FROM 
-    projectdb.order po
-LEFT JOIN 
-    Suppliers s ON po.SupplierID = s.SupplierID
-LEFT JOIN 
-    users u ON po.UserID = u.UserID
-LEFT JOIN 
-    product p ON po.ProductID = p.ProductID
-ORDER BY 
-    po.RequiredDate DESC;
+        po.OrderID,
+        po.ItemName,
+        po.SKU,
+        po.Quantity,
+        po.RequiredDate,
+        s.SupplierName AS Supplier,
+        u.UserName AS RequestedBy,
+        CASE 
+            WHEN po.ProductID IS NOT NULL AND po.SupplierID IS NULL THEN 'Outgoing'
+            WHEN po.SupplierID IS NOT NULL THEN 'Incoming'
+            ELSE 'Unknown'
+        END AS InventoryMovementType,
+        p.ProductName AS RelatedProduct
+    FROM 
+        projectdb.`order` po
+    LEFT JOIN 
+        suppliers s ON po.SupplierID = s.SupplierID
+    LEFT JOIN 
+        users u ON po.UserID = u.UserID
+    LEFT JOIN 
+        product p ON po.ProductID = p.ProductID
+    ORDER BY 
+        po.RequiredDate DESC;
     ''')
+
     cursor.execute(query)
 
     results = cursor.fetchall()
 
     inventory_movements = [
         {
-            key: (value if not isinstance(value, datetime) else value.strftime('%Y-%m-%d'))
+            key: (value.strftime('%Y-%m-%d') if isinstance(value, datetime) else value)
             for key, value in row.items()
         }
         for row in results
