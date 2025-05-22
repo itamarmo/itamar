@@ -1,12 +1,13 @@
+<!-- reports.component.html -->
 <div class="reports-container">
   <header class="header">
-    <h1 class="title">יצירת דוחות</h1>
-	<img src="assets/images/logo.png" alt="System Logo">
+    <div class="title">יצירת דוחות</div>
+    <img src="assets/images/logo.png" alt="System Logo" />
   </header>
 
   <main class="container">
-    <form [formGroup]="reportForm" (ngSubmit)="generateReport()">
-      <div class="report-option">
+    <form [formGroup]="reportForm" (ngSubmit)="generateReport()" class="report-form">
+      <div class="form-row">
         <label for="reportType">בחר דוח להפקה:</label>
         <select id="reportType" formControlName="reportType">
           <option value="inventory">דוח מלאי</option>
@@ -16,26 +17,24 @@
         </select>
       </div>
 
-      <div class="report-option"
-           *ngIf="reportForm.get('reportType')?.value === 'orders'">
-        <label for="startDate">תאריך התחלה:</label>
-        <input type="date" id="startDate" formControlName="startDate">
-
-        <label for="endDate">תאריך סיום:</label>
-        <input type="date" id="endDate" formControlName="endDate">
+      <div class="form-row dates" *ngIf="reportForm.get('reportType')?.value === 'orders'">
+        <div>
+          <label for="startDate">תאריך התחלה:</label>
+          <input type="date" id="startDate" formControlName="startDate" />
+        </div>
+        <div>
+          <label for="endDate">תאריך סיום:</label>
+          <input type="date" id="endDate" formControlName="endDate" />
+        </div>
       </div>
 
       <div class="actions">
-        <button type="submit" [disabled]="loading">
-          {{ loading ? 'טוען...' : 'הפק דוח' }}
-        </button>
-        <button type="button" *ngIf="showResults" (click)="exportToCsv()">ייצוא ל-CSV</button>
+        <button type="submit" [disabled]="loading">{{ loading ? 'טוען...' : 'הפק דוח' }}</button>
+        <button type="button" *ngIf="showResults" (click)="exportToCsv()">ייצוא ל‑CSV</button>
       </div>
     </form>
 
-    <div *ngIf="error" class="error-message">
-      {{ error }}
-    </div>
+    <div *ngIf="error" class="error-message">{{ error }}</div>
 
     <div class="loading-spinner" *ngIf="loading">
       <div class="spinner"></div>
@@ -44,18 +43,18 @@
 
     <div class="results" *ngIf="showResults">
       <h3>תוצאות הדוח</h3>
-      <table>
-        <thead>
-        <tr>
-          <th *ngFor="let header of headers">{{ header }}</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr *ngFor="let row of reportData">
-          <td *ngFor="let header of headers">{{ getRowValue(row, header) }}</td>
-        </tr>
-        </tbody>
-      </table>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr><th *ngFor="let header of headers">{{ header }}</th></tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of reportData">
+              <td *ngFor="let header of headers">{{ getRowValue(row, header) }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </main>
 </div>
