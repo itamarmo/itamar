@@ -26,6 +26,8 @@ export class InventoryComponent implements OnInit {
   sortKey = '';
   sortDirection = true;
   sortField: any;
+  editingIndex: number | null = null;
+  editedItem: any = {};
 
   constructor(private inventoryService: InventoryService) {
   }
@@ -45,14 +47,14 @@ export class InventoryComponent implements OnInit {
     });
   }
 
-  addItem(): void {	  	
+  addItem(): void {
 	   // בדיקה אם יש פריט זהה במלאי
-	  //const existingItem = this.inventory.find(item => 
+	  //const existingItem = this.inventory.find(item =>
 		//item.ProductName === this.newItem.ProductName &&
 		//item.SKU === this.newItem.SKU &&
 		//item.Location === this.newItem.Location
 	 // );
-	 const existingItem = this.inventory.find(item => 
+	 const existingItem = this.inventory.find(item =>
   item.ProductName.trim().toLowerCase() === this.newItem.ProductName.trim().toLowerCase() &&
   item.SKU.trim().toLowerCase() === this.newItem.SKU.trim().toLowerCase() &&
   item.ItemLocation.trim().toLowerCase() === this.newItem.Location.trim().toLowerCase()
@@ -81,7 +83,7 @@ export class InventoryComponent implements OnInit {
   //    this.fetchInventory();
   //  });
   //}
-  
+
   deleteItem(item: any): void {
   if (!item.ProductID) {
     alert("לא נמצא מזהה מוצר למחיקה.");
@@ -146,15 +148,27 @@ export class InventoryComponent implements OnInit {
 }
 
 
-  editItem(itemIndex: number) {
+  editItem(index: number) {
+    this.editingIndex = index;
+    this.editedItem = { ...this.filteredInventory[index] }; // clone to avoid binding directly
+  }
 
+  saveItem(index: number) {
+    this.inventoryService.editInventory(this.editedItem).subscribe(() => {
+      this.filteredInventory[index] = { ...this.editedItem };
+      this.editingIndex = null;
+    });
+  }
+
+  cancelEdit() {
+    this.editingIndex = null;
   }
 
   isExpired(expiryDate: any): boolean {
   if (!expiryDate) {
     return false; // אם לא צוין תאריך תפוגה, נניח שזה לא פג תוקף
   }
-  
+
   const currentDate = new Date(); // מקבלים את התאריך הנוכחי
   const expiry = new Date(expiryDate); // הופכים את תאריך התפוגה לאובייקט תאריך
 

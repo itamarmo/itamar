@@ -26,7 +26,15 @@ export class InventoryService {
     });
   }
 
-  editInventory(id: number, item: any): Observable<any> {
-    return this.http.put(`${this.apiUrl}/EditInventory/${id}`, item);
+  editInventory(item: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/EditInventory`, {
+      ProductName: item.ProductName,
+      SKU: item.SKU,
+      Quantity: item.Quantity,
+      Location: item.ItemLocation,
+      LastUpdatedDate: item.LastUpdatedDate?.toISOString().split('T')[0],
+      ExpiryDate: item.ExpiryDate?.toISOString().split('T')[0],
+      Notes: item.Notes
+    });
   }
 }

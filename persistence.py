@@ -93,6 +93,38 @@ def add_inventory(product_name, sku, quantity, location, last_updated_date, expi
     connection.commit()
 
 
+def edit_inventory(product_name, sku, quantity, location, last_updated_date, expiry_date, notes):
+    query = """
+UPDATE product
+SET
+  ProductName = %s,
+  Quantity = %s,
+  ItemLocation = %s,
+  LastUpdatedDate = %s,
+  ExpiryDate = %s,
+  Notes = %s,
+  FK_LocationID = %s
+WHERE
+  SKU = %s;
+    """
+
+    # Convert dates if necessary (assuming they are datetime objects or strings in 'YYYY-MM-DD' format)
+    if isinstance(last_updated_date, datetime):
+        last_updated_date = last_updated_date.strftime('%Y-%m-%d')
+
+    if isinstance(expiry_date, datetime):
+        expiry_date = expiry_date.strftime('%Y-%m-%d')
+
+    location_id = get_location_id(location)
+
+    data = (product_name, quantity, location, last_updated_date, expiry_date, notes,
+            location_id, sku)
+
+    cursor.execute(query, data)
+    rows_affected = cursor.rowcount
+    print(f"Rows affected: {rows_affected}")
+    connection.commit()
+
 def get_last_order_id():
     query = "SELECT MAX(OrderID) AS HighestOrderID FROM `order`"
     cursor.execute(query)

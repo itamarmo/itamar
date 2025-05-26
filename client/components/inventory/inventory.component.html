@@ -75,20 +75,44 @@
     </thead>
     <tbody>
     <tr *ngFor="let item of filteredInventory; let i = index">
-      <td>{{ item.SKU }}</td>
-      <td>{{ item.ProductName }}</td>
-      <td>{{ item.Quantity }}</td>
-      <td>{{ item.ItemLocation }}</td>
-      <td>{{ item.LastUpdatedDate | date:'dd/MM/yyyy' }}</td>
-      <td>{{ (item.ExpiryDate | date:'dd/MM/yyyy') || 'לא צוין' }}</td>
-      <td [class.expired]="isExpired(item.ExpiryDate)" [class.valid]="!isExpired(item.ExpiryDate)">
-        {{ item.ExpiryDate ? (isExpired(item.ExpiryDate) ? 'פג תוקף' : 'בתוקף') : 'לא צוין' }}
-      </td>
-      <td>{{ item.Notes }}</td>
-      <td>
-        <button (click)="editItem(i)">✏️</button>
-        <button (click)="deleteItem(item)">🗑️</button>
-      </td>
+      <ng-container *ngIf="editingIndex === i; else readMode">
+        <td>{{editedItem.SKU}}</td>
+        <td><input [(ngModel)]="editedItem.ProductName" /></td>
+        <td><input type="number" [(ngModel)]="editedItem.Quantity" /></td>
+        <td>
+          <select [(ngModel)]="editedItem.ItemLocation">
+            <option value="Megiddo">מגידו</option>
+            <option value="Kedma">קדמה</option>
+          </select>
+        </td>
+        <td><input type="date" [(ngModel)]="editedItem.LastUpdatedDate" /></td>
+        <td><input type="date" [(ngModel)]="editedItem.ExpiryDate" /></td>
+        <td>
+          {{ editedItem.ExpiryDate ? (isExpired(editedItem.ExpiryDate) ? 'פג תוקף' : 'בתוקף') : 'לא צוין' }}
+        </td>
+        <td><input [(ngModel)]="editedItem.Notes" /></td>
+        <td>
+          <button (click)="saveItem(i)">💾</button>
+          <button (click)="cancelEdit()">❌</button>
+        </td>
+      </ng-container>
+
+      <ng-template #readMode>
+        <td>{{ item.SKU }}</td>
+        <td>{{ item.ProductName }}</td>
+        <td>{{ item.Quantity }}</td>
+        <td>{{ item.ItemLocation }}</td>
+        <td>{{ item.LastUpdatedDate | date:'dd/MM/yyyy' }}</td>
+        <td>{{ (item.ExpiryDate | date:'dd/MM/yyyy') || 'לא צוין' }}</td>
+        <td [class.expired]="isExpired(item.ExpiryDate)" [class.valid]="!isExpired(item.ExpiryDate)">
+          {{ item.ExpiryDate ? (isExpired(item.ExpiryDate) ? 'פג תוקף' : 'בתוקף') : 'לא צוין' }}
+        </td>
+        <td>{{ item.Notes }}</td>
+        <td>
+          <button (click)="editItem(i)">✏️</button>
+          <button (click)="deleteItem(item)">🗑️</button>
+        </td>
+      </ng-template>
     </tr>
     </tbody>
   </table>

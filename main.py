@@ -77,6 +77,20 @@ async def add_inventory(product: Product):
     persistence.add_inventory(product_name, product_id, quantity, location, last_updated_date, expiry_date, notes)
 
 
+@app.put("/EditInventory")
+async def edit_inventory(product: Product):
+    product_name = product.ProductName
+    product_id = product.SKU
+    quantity = product.Quantity
+    location = product.Location
+    last_updated_date = product.LastUpdatedDate
+    expiry_date = product.ExpiryDate
+    notes = product.Notes
+
+    persistence.edit_inventory(product_name, product_id, quantity, location, last_updated_date, expiry_date, notes)
+
+
+
 @app.get("/GetOrders/")
 async def get_orders():
     return persistence.get_orders()
