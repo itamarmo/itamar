@@ -10,13 +10,20 @@
 
   <div class="form-group">
     <label for="productName">שם מוצר</label>
-    <input [(ngModel)]="productName" id="productName" list="productNames" required>
+    <input [(ngModel)]="productName" id="productName" list="productNames" readonly disabled="true">
     <datalist id="productNames"></datalist>
   </div>
 
   <div class="form-group">
     <label for="productCode">מק"ט</label>
-    <input [(ngModel)]="SKU" id="productCode" list="productCodes" required>
+    <mat-form-field style="width: 300px;" id="productCode">
+      <input type="text" matInput [formControl]="myControl" style="width: 100%" [matAutocomplete]="auto"  placeholder="בחר מקט">
+      <mat-autocomplete #auto="matAutocomplete" (optionSelected)="skuSelected($event)">
+        <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+          {{ option }}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
     <datalist id="productCodes"></datalist>
   </div>
 

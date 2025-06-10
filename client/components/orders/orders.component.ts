@@ -1,19 +1,31 @@
 import { Component } from '@angular/core';
 import {OrderRequest, OrdersService} from '../../services/orders.service';
-import {FormsModule} from '@angular/forms';
-import {NgForOf} from '@angular/common';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {CommonModule, NgForOf} from '@angular/common';
+import {MatInputModule} from '@angular/material/input';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import {BrowserModule} from '@angular/platform-browser';
+import {map, Observable, startWith} from 'rxjs';
+import { FormControl } from '@angular/forms';
+import {InventoryService} from '../../services/inventory.service';
+import {Inventory} from '../reports/reports.component';
 
 @Component({
   selector: 'app-orders',
   imports: [
     FormsModule,
-    NgForOf
+    NgForOf,
+    CommonModule,
+    ReactiveFormsModule,
+    MatAutocompleteModule,
+    MatInputModule
   ],
   templateUrl: './orders.component.html',
   styleUrl: './orders.component.css'
 })
 export class OrdersComponent {
   previousRequests: OrderRequest[] = [];
+  inventory: any[] = [];
   productName = '';
   SKU = '';
   quantity: number | null = null;
@@ -21,17 +33,42 @@ export class OrdersComponent {
   location = '';
   notes = '';
   locations = ['מגידו', 'קדמה'];
+  myControl = new FormControl();
+  SKUOptions: string[] = [];
+  filteredOptions!: Observable<string[]>;
 
-  constructor(private orderService: OrdersService) {}
+  constructor(private orderService: OrdersService, private inventoryService: InventoryService) {}
 
   ngOnInit(): void {
     this.loadPreviousRequests();
+    this.loadInventory();
+    this.filteredOptions = this.myControl.valueChanges.pipe(
+      startWith(''),
+      map(value => this._filter(value))
+    );
+  }
+
+  private _filter(value: string): string[] {
+    const filterValue = value.toLowerCase();
+    return this.SKUOptions.filter(option => option.toLowerCase().includes(filterValue));
   }
 
   loadPreviousRequests() {
     this.orderService.getRequests().subscribe({
       next: (requests) => {
         this.previousRequests = requests;
+      },
+      error: (err) => {
+        console.error('Failed to load requests', err);
+      },
+    });
+  }
+
+  loadInventory(){
+    this.inventoryService.getInventory().subscribe({
+      next: (inventory) => {
+        this.inventory = inventory;
+        this.SKUOptions = inventory.map(i => i.SKU);
       },
       error: (err) => {
         console.error('Failed to load requests', err);
@@ -103,5 +140,10 @@ export class OrdersComponent {
 
     const orderRequestJson = JSON.stringify(newRequest);
     window.location.href = `mailto:?subject=בקשה להזמנת רכש&body=${encodeURIComponent(orderRequestJson)}`;
+  }
+
+  skuSelected(event : any){
+    this.SKU = event.option.value;
+    this.productName = this.inventory.find(i => i.SKU == this.SKU).ProductName;
   }
 }
