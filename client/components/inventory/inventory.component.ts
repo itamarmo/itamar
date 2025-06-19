@@ -121,31 +121,72 @@ export class InventoryComponent implements OnInit {
     );
   }
 
-  sortItems(): void {
-  if (!this.sortField) return; // אם לא נבחר שדה, לא נבצע מיון
+  //sortItems(): void {
+  //if (!this.sortField) return; // אם לא נבחר שדה, לא נבצע מיון
 
-  this.filteredInventory.sort((a, b) => {
-    const valueA = a[this.sortField];
-    const valueB = b[this.sortField];
+  //this.filteredInventory.sort((a, b) => {
+  //  const valueA = a[this.sortField];
+  //  const valueB = b[this.sortField];
 
     // אם המפתח הוא תאריך, נוודא שאנחנו ממיינים נכון (לפי זמן)
-    if (valueA instanceof Date && valueB instanceof Date) {
-      return valueA.getTime() - valueB.getTime(); // מיון לפי זמן
-    }
+  //  if (valueA instanceof Date && valueB instanceof Date) {
+  //    return valueA.getTime() - valueB.getTime(); // מיון לפי זמן
+  //  }
 
     // מיון לפי מספרים (כמות לדוגמה)
+  //  if (typeof valueA === 'number' && typeof valueB === 'number') {
+  //    return valueA - valueB;
+  //  }
+
+    // מיון לפי מחרוזות (טקסט)
+   // if (typeof valueA === 'string' && typeof valueB === 'string') {
+   //   return valueA.localeCompare(valueB);
+   // }
+
+   // return 0;
+  //});
+//}
+sortItems(): void {
+  if (!this.sortField) return;
+
+  this.filteredInventory.sort((a, b) => {
+    let valueA = a[this.sortField];
+    let valueB = b[this.sortField];
+
+    // תמיכה בשם שונה בפועל (ItemLocation)
+    if (this.sortField === 'Location') {
+      valueA = a.ItemLocation || '';
+      valueB = b.ItemLocation || '';
+    }
+
+    // מיון תאריכים
+    const isDate = (val: any) => val instanceof Date || (!isNaN(Date.parse(val)) && typeof val === 'string');
+
+    if (isDate(valueA) && isDate(valueB)) {
+      const dateA = new Date(valueA).getTime();
+      const dateB = new Date(valueB).getTime();
+      return dateA - dateB;
+    }
+
+    // מיון מספרים
     if (typeof valueA === 'number' && typeof valueB === 'number') {
       return valueA - valueB;
     }
 
-    // מיון לפי מחרוזות (טקסט)
+    // מיון טקסט
     if (typeof valueA === 'string' && typeof valueB === 'string') {
       return valueA.localeCompare(valueB);
     }
 
     return 0;
   });
+
+  // אם הסימון הוא הפוך
+ // if (!this.sortDirection) {
+  //  this.filteredInventory.reverse();
+ // }
 }
+
 
 
   editItem(index: number) {
